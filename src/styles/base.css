@@ -1,0 +1,18 @@
+/* @jordiorriols/ui Base Styles */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+  }
+}
+
+/* Dark mode variant */
+@custom-variant dark (&:is(.dark *));
