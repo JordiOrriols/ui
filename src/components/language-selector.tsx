@@ -65,7 +65,7 @@ function LanguageSelector({
     <nav
       className={cn(
         positionClasses[position],
-        "flex items-center gap-1 bg-secondary rounded-full p-1",
+        "flex items-center gap-1.5",
         className
       )}
       role="navigation"
@@ -78,10 +78,10 @@ function LanguageSelector({
           aria-pressed={selectedLanguage === lang.code}
           aria-label={`Switch to ${languageNames[lang.code] ?? lang.code}`}
           className={cn(
-            "px-2 py-1 rounded-full text-xs font-medium transition-all duration-200",
+            "px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200",
             selectedLanguage === lang.code
-              ? "bg-primary text-primary-foreground shadow-sm"
-              : "text-muted-foreground hover:text-foreground"
+              ? "opacity-100 bg-primary/20 text-foreground"
+              : "opacity-70 text-muted-foreground hover:opacity-100 hover:bg-primary/10"
           )}
         >
           {lang.label}
