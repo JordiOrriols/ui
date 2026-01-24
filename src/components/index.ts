@@ -57,3 +57,20 @@ export {
   type Language,
   type LanguageSelectorProps,
 } from "./language-selector";
+
+export { Modal, ModalFooter, type ModalProps, type ModalFooterProps } from "./modal";
+
+export {
+  Header,
+  HeaderLogo,
+  type HeaderProps,
+  type HeaderLogoProps,
+} from "./header";
+
+export {
+  ThemeSelector,
+  useTheme,
+  applyTheme,
+  type Theme,
+  type ThemeSelectorProps,
+} from "./theme-selector";
