@@ -59,10 +59,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jordiorriols/ui.git"
+    "url": "git+https://github.com/JordiOrriols/ui.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com/@jordiorriols"
   },
   "author": "Jordi Orriols",
   "license": "MIT",
