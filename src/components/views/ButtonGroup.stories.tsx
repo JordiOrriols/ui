@@ -9,7 +9,7 @@ const meta = {
 } satisfies Meta<typeof ButtonGroup>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj;
 
 function Filters() {
   const [values, setValues] = useState(["one"]);

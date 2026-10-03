@@ -119,6 +119,18 @@ entries, compound-part metadata and coverage for every styled component export
 and official Radix namespace. When adding a component, add its example and
 metadata in the same change.
 
+Demo-only styles supply geometry for unstyled Radix sliders, scrollbars, dialogs
+and toasts without modifying the official exports. The one-time-password demo
+uses six inputs and displays the complete controlled code; the toast can be
+reopened after dismissal. Rendering and interaction regressions are checked in
+addition to the metadata contracts.
+
+`WelcomeScreen` is the shared Planner-style welcome view: inject branding,
+feature descriptions, translated action labels and authentication callbacks.
+`AppHeader` standardizes title/subtitle and icon sizes, account actions and an
+optional navigation row below the brand/language/account row. Both views are
+presentation-only; consumers own routing, localization and authentication.
+
 ### Shared hooks
 
 ```tsx
@@ -192,6 +204,15 @@ npm run dev
 
 # Type check
 npm run typecheck
+
+# Type check Storybook stories and preview (excluded by the library tsconfig)
+npx tsc --noEmit -p .storybook/tsconfig.json
+
+# Storybook metadata, rendering and interaction tests
+npm test -- src/storybook.test.ts src/storybook-rendering.test.tsx
+
+# Build the standalone Storybook
+npm run build-storybook
 ```
 
 ## Publishing

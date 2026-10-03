@@ -1,4 +1,5 @@
 import "./preview.css";
+import "./radix.css";
 
 import type { Preview } from "@storybook/react-vite";
 

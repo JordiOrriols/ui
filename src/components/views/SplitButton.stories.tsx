@@ -8,7 +8,7 @@ const meta = {
 } satisfies Meta<typeof SplitButton>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj;
 
 export const SharingActions: Story = {
   render: () => (

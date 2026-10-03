@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "declarationMap": false,
+    "types": ["vite/client"]
+  },
+  "include": ["./preview.tsx", "../src/**/*.stories.ts", "../src/**/*.stories.tsx"],
+  "exclude": ["../node_modules", "../dist"]
+}

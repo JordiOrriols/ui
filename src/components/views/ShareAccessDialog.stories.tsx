@@ -10,7 +10,7 @@ const meta = {
 } satisfies Meta<typeof ShareAccessDialog>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj;
 
 function Sharing({ empty = false, loading = false }: { empty?: boolean; loading?: boolean }) {
   const [isOpen, setOpen] = useState(true);

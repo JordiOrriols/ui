@@ -21,7 +21,7 @@ const meta = {
 } satisfies Meta<typeof LoginDialog>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj;
 
 function LoginExample({
   mode = "signIn",

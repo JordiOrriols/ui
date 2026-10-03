@@ -8,7 +8,7 @@ const meta = {
 } satisfies Meta<typeof RadarChart>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj;
 
 const axes = ["Quality", "Reliability", "Speed", "Collaboration"];
 const series = [

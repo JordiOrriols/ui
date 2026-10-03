@@ -9,7 +9,7 @@ const meta = {
 } satisfies Meta<typeof LanguageSelector>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj;
 
 function LanguageMenu() {
   const [value, setValue] = useState("en");

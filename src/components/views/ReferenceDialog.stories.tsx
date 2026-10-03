@@ -9,7 +9,7 @@ const meta = {
 } satisfies Meta<typeof ReferenceDialog>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj;
 
 function Reference() {
   const [isOpen, setOpen] = useState(false);

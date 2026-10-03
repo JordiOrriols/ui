@@ -24,21 +24,47 @@ const itemStyle = {
 };
 
 function ToastDemo() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   return (
     <R.Toast.Provider>
       <button type="button" style={triggerStyle} onClick={() => setOpen(true)}>
         Show toast
       </button>
-      <R.Toast.Root open={open} onOpenChange={setOpen}>
+      <R.Toast.Root open={open} onOpenChange={setOpen} className="radix-demo-toast">
         <R.Toast.Title>Changes saved</R.Toast.Title>
         <R.Toast.Description>Your project has been updated.</R.Toast.Description>
         <R.Toast.Close aria-label="Dismiss notification" style={triggerStyle}>
           Dismiss
         </R.Toast.Close>
       </R.Toast.Root>
-      <R.Toast.Viewport />
+      <R.Toast.Viewport className="radix-demo-toast-viewport" />
     </R.Toast.Provider>
+  );
+}
+
+function OneTimePasswordDemo() {
+  const [value, setValue] = useState("");
+  return (
+    <div>
+      <R.unstable_OneTimePasswordField.Root
+        aria-label="One-time code"
+        validationType="numeric"
+        value={value}
+        onValueChange={setValue}
+        placeholder="-"
+        style={{ display: "flex", gap: 8 }}
+      >
+        {Array.from({ length: 6 }, (_, index) => (
+          <R.unstable_OneTimePasswordField.Input
+            key={index}
+            index={index}
+            aria-label={`Digit ${index + 1}`}
+            style={{ ...itemStyle, width: 36, textAlign: "center" }}
+          />
+        ))}
+      </R.unstable_OneTimePasswordField.Root>
+      <output aria-label="Entered code">{value || "Enter six digits"}</output>
+    </div>
   );
 }
 
@@ -70,8 +96,8 @@ const demos: Record<string, RadixDemo> = {
       <R.AlertDialog.Root>
         <R.AlertDialog.Trigger style={triggerStyle}>Delete item</R.AlertDialog.Trigger>
         <R.AlertDialog.Portal>
-          <R.AlertDialog.Overlay />
-          <R.AlertDialog.Content>
+          <R.AlertDialog.Overlay className="radix-demo-overlay" />
+          <R.AlertDialog.Content className="radix-demo-dialog">
             <R.AlertDialog.Title>Delete this item?</R.AlertDialog.Title>
             <R.AlertDialog.Description>This action cannot be undone.</R.AlertDialog.Description>
             <R.AlertDialog.Cancel style={triggerStyle}>Cancel</R.AlertDialog.Cancel>{" "}
@@ -162,8 +188,8 @@ const demos: Record<string, RadixDemo> = {
       <R.Dialog.Root>
         <R.Dialog.Trigger style={triggerStyle}>Open dialog</R.Dialog.Trigger>
         <R.Dialog.Portal>
-          <R.Dialog.Overlay />
-          <R.Dialog.Content>
+          <R.Dialog.Overlay className="radix-demo-overlay" />
+          <R.Dialog.Content className="radix-demo-dialog">
             <R.Dialog.Title>Project details</R.Dialog.Title>
             <R.Dialog.Description>Review the current project information.</R.Dialog.Description>
             <R.Dialog.Close style={triggerStyle}>Close</R.Dialog.Close>
@@ -211,6 +237,7 @@ const demos: Record<string, RadixDemo> = {
         <R.Form.Field name="email">
           <R.Form.Label>Email</R.Form.Label>
           <R.Form.Control type="email" required style={itemStyle} />
+          <R.Form.Message match="valueMissing">Enter your email address.</R.Form.Message>
           <R.Form.Message match="typeMismatch">Enter a valid email address.</R.Form.Message>
         </R.Form.Field>
         <R.Form.Submit style={triggerStyle}>Submit</R.Form.Submit>
@@ -294,7 +321,11 @@ const demos: Record<string, RadixDemo> = {
   Progress: {
     component: R.Progress.Root,
     render: () => (
-      <R.Progress.Root value={60} aria-label="Upload progress">
+      <R.Progress.Root
+        value={60}
+        aria-label="Upload progress"
+        style={{ width: 240, background: "#e2e8f0", borderRadius: 6 }}
+      >
         <R.Progress.Indicator
           style={{
             display: "block",
@@ -329,15 +360,15 @@ const demos: Record<string, RadixDemo> = {
     component: R.ScrollArea.Root,
     render: () => (
       <R.ScrollArea.Root style={{ height: 120, width: 220, border: "1px solid #cbd5e1" }}>
-        <R.ScrollArea.Viewport style={{ height: "100%" }}>
+        <R.ScrollArea.Viewport aria-label="Scrollable rows" tabIndex={0} style={{ height: "100%" }}>
           {Array.from({ length: 12 }, (_, index) => (
             <p key={index} style={{ margin: "0.5rem", borderBottom: "1px solid #e2e8f0" }}>
               Scrollable row {index + 1}
             </p>
           ))}
         </R.ScrollArea.Viewport>
-        <R.ScrollArea.Scrollbar orientation="vertical">
-          <R.ScrollArea.Thumb />
+        <R.ScrollArea.Scrollbar orientation="vertical" className="radix-demo-scrollbar">
+          <R.ScrollArea.Thumb className="radix-demo-scroll-thumb" />
         </R.ScrollArea.Scrollbar>
       </R.ScrollArea.Root>
     ),
@@ -390,7 +421,14 @@ const demos: Record<string, RadixDemo> = {
         max={100}
         step={1}
         aria-label="Volume"
-        style={{ position: "relative", display: "flex", width: 240, height: 24 }}
+        style={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          touchAction: "none",
+          width: 240,
+          height: 24,
+        }}
       >
         <R.Slider.Track
           style={{
@@ -431,6 +469,7 @@ const demos: Record<string, RadixDemo> = {
     render: () => (
       <R.Switch.Root
         aria-label="Notifications"
+        className="radix-demo-switch"
         style={{
           display: "inline-flex",
           alignItems: "center",
@@ -443,6 +482,7 @@ const demos: Record<string, RadixDemo> = {
         }}
       >
         <R.Switch.Thumb
+          className="radix-demo-switch-thumb"
           style={{
             display: "block",
             width: 20,
@@ -479,7 +519,7 @@ const demos: Record<string, RadixDemo> = {
   Toggle: {
     component: R.Toggle.Root,
     render: () => (
-      <R.Toggle.Root aria-label="Bold" style={triggerStyle}>
+      <R.Toggle.Root aria-label="Bold" className="radix-demo-toggle" style={triggerStyle}>
         Bold
       </R.Toggle.Root>
     ),
@@ -493,6 +533,7 @@ const demos: Record<string, RadixDemo> = {
             key={value}
             value={value}
             aria-label={`Align ${value}`}
+            className="radix-demo-toggle"
             style={itemStyle}
           >
             {value}
@@ -535,19 +576,7 @@ const demos: Record<string, RadixDemo> = {
   },
   unstable_OneTimePasswordField: {
     component: R.unstable_OneTimePasswordField.Root,
-    render: () => (
-      <R.unstable_OneTimePasswordField.Root
-        aria-label="One-time code"
-        validationType="numeric"
-        placeholder="·"
-        style={{ display: "flex", gap: 8 }}
-      >
-        <R.unstable_OneTimePasswordField.Input
-          aria-label="One-time code"
-          style={{ width: 180, padding: "0.5rem", letterSpacing: "0.5rem" }}
-        />
-      </R.unstable_OneTimePasswordField.Root>
-    ),
+    render: () => <OneTimePasswordDemo />,
   },
   unstable_PasswordToggleField: {
     component: R.unstable_PasswordToggleField.Root,

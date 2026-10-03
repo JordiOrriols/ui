@@ -11,7 +11,7 @@ const meta = {
 } satisfies Meta<typeof AppHeader>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj;
 
 function HeaderExample() {
   const [language, setLanguage] = useState("en");

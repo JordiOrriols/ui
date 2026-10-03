@@ -10,7 +10,7 @@ const meta = {
 } satisfies Meta<typeof PasswordResetDialog>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj;
 
 function RecoveryExample() {
   const [isOpen, setOpen] = useState(false);
