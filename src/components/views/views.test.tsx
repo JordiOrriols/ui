@@ -16,7 +16,7 @@ import { NameDialog } from "./NameDialog";
 import { useLoginForm } from "../../hooks/useLoginForm";
 import { usePasswordResetForm } from "../../hooks/usePasswordResetForm";
 import { useNameForm } from "../../hooks/useNameForm";
-import { loginLabels } from "./auth.stories";
+import { loginLabels } from "./login-labels";
 import type { AuthActions } from "../../hooks/useSupabaseAuth";
 
 const messages = { passwordResetSent: "Reset sent", checkEmail: "Confirm your email" };
