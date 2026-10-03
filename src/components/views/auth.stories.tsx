@@ -36,7 +36,11 @@ const actions: AuthActions = {
   signOut: async () => {},
 };
 
-export default { title: "Views/Auth", tags: ["autodocs"] } satisfies Meta;
+export default {
+  title: "Views/Auth",
+  tags: ["autodocs"],
+  excludeStories: ["loginLabels"],
+} satisfies Meta;
 type Story = StoryObj;
 
 function LoginExample({
