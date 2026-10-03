@@ -102,6 +102,10 @@ exports. They are not substitutes for the entire Radix API.
 - `LanguageSelector`: host-provided languages and selection callback
 - `AppHeader`: branding and action slots
 - `UserAvatar`, `Spinner`, `ProgressIndicator`, `StatusBadge`: display indicators
+- `ProfileCard`, `RadarChart`, `CommentGroups`: data display without app-specific schemas
+- `LevelSelector`: supplied options, summary, controlled values and local expansion
+- `ShareAccessDialog`: supplied permission options and access entries
+- `ReferenceDialog`: original Ladders reference layout with a content slot
 
 Views take text and callbacks as props. They do not import an application router,
 translation provider, database tables, repository, credentials or Supabase client.
@@ -124,6 +128,10 @@ logic separately from the views. `useAsyncAction` surfaces operation failures
 and ignores completions from cancelled/reset/unmounted forms. Session restoration
 errors are exposed as `authError`; consumers must render them. Unconfigured
 authentication rejects actions rather than reporting a false success.
+`useShareAccessForm` runs host-provided invitation, access-change and removal
+callbacks without knowing any tables or assuming specific permission values.
+`ReferenceDialog` deliberately preserves the original reference layout and
+Escape/overlay behavior; use the Radix-backed `Modal` for new generic dialogs.
 
 Umami analytics already uses the shared `configureAnalytics` / `trackEvent`
 adapter. The host app owns the Umami script and website identifier.

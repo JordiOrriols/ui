@@ -3,3 +3,4 @@ export * from "./useAsyncAction";
 export * from "./useLoginForm";
 export * from "./usePasswordResetForm";
 export * from "./useNameForm";
+export * from "./useShareAccessForm";
