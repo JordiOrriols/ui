@@ -1,6 +1,8 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Check, ChevronDown, Globe } from "lucide-react";
-import { Button } from "../ui/button";
+import { buttonVariants } from "../ui/button";
+import { cn } from "../../lib/utils";
+import { trackButtonClick } from "../../utils/analytics";
 
 export interface LanguageOption {
   code: string;
@@ -26,19 +28,15 @@ export function LanguageSelector({
     languages.find((language) => language.code === current)?.short ?? languages[0]?.short;
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger asChild>
-        <Button
-          eventId="header_language_menu"
-          variant="outline"
-          size="sm"
-          aria-label={label}
-          data-testid="language-selector"
-          className={className}
-        >
-          <Globe className="h-4 w-4" />
-          {short}
-          <ChevronDown className="h-3.5 w-3.5" />
-        </Button>
+      <DropdownMenu.Trigger
+        aria-label={label}
+        data-testid="language-selector"
+        className={cn(buttonVariants({ variant: "outline", size: "sm" }), className)}
+        onClick={() => trackButtonClick("header_language_menu")}
+      >
+        <Globe className="h-4 w-4" />
+        {short}
+        <ChevronDown className="h-3.5 w-3.5" />
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content

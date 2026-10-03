@@ -13,6 +13,7 @@ export * from "./views/LanguageSelector";
 export * from "./views/indicators";
 export * from "./views/ButtonGroup";
 export * from "./views/AppHeader";
+export * from "./views/WelcomeScreen";
 export * from "./views/NameDialog";
 export * from "./views/Modal";
 export * from "./views/RadarChart";

@@ -109,11 +109,15 @@ exports. They are not substitutes for the entire Radix API.
 
 Views take text and callbacks as props. They do not import an application router,
 translation provider, database tables, repository, credentials or Supabase client.
-Storybook covers the styled views and all official Radix namespaces.
-Grouped stories register their components through Storybook's `subcomponents`
-metadata, including each exported AlertDialog and Tabs part. The Storybook
-coverage test checks every styled component export and official Radix namespace;
-when adding a component, add its example and metadata in the same change.
+Storybook gives each styled component and each of the 35 official Radix
+namespaces its own sidebar entry. Demos exercise interaction where the primitive
+supports it; inherently structural primitives show a focused rendering example.
+Compound components such as AlertDialog and Tabs each have one entry, with their
+exported parts documented through Storybook's `subcomponents` metadata rather
+than fragment-only entries. The Storybook contract test checks the individual
+entries, compound-part metadata and coverage for every styled component export
+and official Radix namespace. When adding a component, add its example and
+metadata in the same change.
 
 ### Shared hooks
 
