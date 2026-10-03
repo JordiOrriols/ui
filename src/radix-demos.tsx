@@ -105,7 +105,6 @@ const demos: Record<string, RadixDemo> = {
     component: R.Avatar.Root,
     render: () => (
       <R.Avatar.Root>
-        <R.Avatar.Image src="/missing-avatar.png" alt="Ada Lovelace" />
         <R.Avatar.Fallback delayMs={0} style={{ ...itemStyle, display: "inline-block" }}>
           AL
         </R.Avatar.Fallback>

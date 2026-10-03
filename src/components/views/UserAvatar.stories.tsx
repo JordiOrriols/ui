@@ -15,7 +15,7 @@ export const Fallbacks: Story = {
     <div className="flex gap-3">
       <UserAvatar label="User" />
       <UserAvatar label="Ada Lovelace" fallback="AL" />
-      <UserAvatar label="Missing image" src="/missing-avatar.png" fallback="?" />
+      <UserAvatar label="Another user" fallback="?" />
     </div>
   ),
 };
