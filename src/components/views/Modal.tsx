@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Button } from "../ui/button";
+import { buttonVariants } from "../ui/button";
 
 export function Modal({
   isOpen,
@@ -32,8 +32,8 @@ export function Modal({
           </div>
           {children}
           <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-            <Dialog.Close asChild>
-              <Button variant="outline">{closeLabel}</Button>
+            <Dialog.Close className={buttonVariants({ variant: "outline" })}>
+              {closeLabel}
             </Dialog.Close>
             {footer}
           </div>
