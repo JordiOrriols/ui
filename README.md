@@ -19,17 +19,27 @@ npm install @jordiorriols/ui
 
 ## Usage
 
+### Required: register the library as a Tailwind source
+
+Tailwind skips `node_modules` when auto-detecting sources, so the class names
+that live inside this package are never generated and components render
+unstyled. Add a `@source` directive to your main CSS file, pointing at the
+library's `dist` folder:
+
+```css
+@import "tailwindcss";
+@source "./node_modules/@jordiorriols/ui/dist";
+```
+
+The path is relative to your main CSS file. If you keep it elsewhere, adjust it.
+
 ### Import Components
 
 ```tsx
-import { Button, Card, LanguageSelector, Dialog } from "@jordiorriols/ui";
+import { Button, buttonVariants, cn, configureAnalytics } from "@jordiorriols/ui";
 
 function MyComponent() {
-  return (
-    <Card>
-      <Button variant="primary">Click me</Button>
-    </Card>
-  );
+  return <Button variant="outline" size="sm">Click me</Button>;
 }
 ```
 
@@ -39,6 +49,7 @@ Add the design tokens to your main CSS file:
 
 ```css
 @import "tailwindcss";
+@source "./node_modules/@jordiorriols/ui/dist";
 @import "@jordiorriols/ui/styles";
 ```
 
