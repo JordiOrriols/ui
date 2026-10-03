@@ -15,10 +15,12 @@ type Story = StoryObj<typeof meta>;
 
 function HeaderExample() {
   const [language, setLanguage] = useState("en");
+  const [signedIn, setSignedIn] = useState(false);
+  const [activePage, setActivePage] = useState("overview");
   return (
     <AppHeader
-      title="Your application"
-      subtitle="Your subtitle"
+      title="Field Notes"
+      subtitle="Workspace"
       icon={<LayoutGrid className="h-5 w-5 text-white" />}
       actions={
         <LanguageSelector
@@ -31,8 +33,36 @@ function HeaderExample() {
           label="Language"
         />
       }
+      accountAction={{
+        type: signedIn ? "signOut" : "signIn",
+        label: signedIn ? "Sign out" : "Sign in",
+        onClick: () => setSignedIn((previous) => !previous),
+      }}
+      navigation={
+        <nav aria-label="Main navigation" className="flex gap-2 py-2">
+          {[
+            ["overview", "Overview"],
+            ["people", "People"],
+            ["settings", "Settings"],
+          ].map(([page, label]) => (
+            <button
+              key={page}
+              type="button"
+              aria-current={activePage === page ? "page" : undefined}
+              onClick={() => setActivePage(page)}
+              className={`rounded-md px-3 py-1.5 text-sm ${
+                activePage === page
+                  ? "bg-accent text-accent-foreground"
+                  : "text-muted-foreground hover:bg-muted"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </nav>
+      }
     />
   );
 }
 
-export const WithActions: Story = { render: () => <HeaderExample /> };
+export const AccountAndNavigation: Story = { render: () => <HeaderExample /> };
