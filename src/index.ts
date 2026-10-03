@@ -1,5 +1,6 @@
 // Components
 export * from "./components";
+export * as Radix from "./radix";
 
 // Utilities
 export { cn } from "./lib/utils";
