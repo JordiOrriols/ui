@@ -146,14 +146,19 @@ Build this package first, then install it in each app:
 
 ```bash
 cd ../ui && npm run build
-cd ../ladders && npm install ../ui --install-links --ignore-scripts
-cd ../planner && npm install ../ui --install-links --ignore-scripts
+cd ../ladders
+npm uninstall @jordiorriols/ui --ignore-scripts
+npm install ../ui --install-links --ignore-scripts
+cd ../planner
+npm uninstall @jordiorriols/ui --ignore-scripts
+npm install ../ui --install-links --ignore-scripts
 ```
 
 Both consumers use `file:../ui` with `install-links=true` in their npm
 configuration. This installs the package without symlinking the library's
 development React into the app, avoiding duplicate-React hook errors (including
-Radix's CommonJS dependencies). Reinstall after changing the shared package.
+Radix's CommonJS dependencies). Remove and reinstall after changing the shared
+package without bumping its version; `npm install` alone can retain the old copy.
 
 Both apps import `@jordiorriols/ui/styles/tokens`; change shared colors and
 radii here instead of duplicating token declarations in the apps. Keep their
