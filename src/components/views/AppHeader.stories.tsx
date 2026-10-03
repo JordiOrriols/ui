@@ -66,3 +66,24 @@ function HeaderExample() {
 }
 
 export const AccountAndNavigation: Story = { render: () => <HeaderExample /> };
+
+export const DisabledAccountAction: Story = {
+  render: () => (
+    <AppHeader
+      title="Field Notes"
+      subtitle="Workspace"
+      icon={<LayoutGrid />}
+      accountAction={{
+        type: "signOut",
+        label: "Signing out",
+        title: "Please wait while your session ends",
+        disabled: true,
+        onClick: () => {},
+      }}
+    />
+  ),
+};
+
+export const WithoutAccountOrNavigation: Story = {
+  render: () => <AppHeader title="Field Notes" subtitle="Workspace" icon={<LayoutGrid />} />,
+};
