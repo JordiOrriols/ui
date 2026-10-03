@@ -26,6 +26,7 @@
   ],
   "scripts": {
     "build": "tsup && npm run build:css",
+    "build-storybook": "storybook build",
     "build:css": "cp -r src/styles dist/",
     "dev": "tsup --watch",
     "format": "prettier --write src",
@@ -57,6 +58,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
+    "@storybook/addon-a11y": "^9.1.20",
+    "@storybook/addon-docs": "^9.1.20",
+    "@storybook/react-vite": "^9.1.20",
+    "@tailwindcss/vite": "^4.3.3",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.7",
@@ -71,6 +76,7 @@
     "prettier": "^3.9.9",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
+    "storybook": "^9.1.20",
     "tsup": "^8.5.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.71.0",

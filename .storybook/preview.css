@@ -1,0 +1,10 @@
+/* Storybook preview styles for @jordiorriols/ui
+ *
+ * Loads the library's own design tokens so stories render with the exact
+ * styles consumers get.
+ */
+@import "tailwindcss";
+@source "../src";
+
+@import "../src/styles/tokens.css";
+@import "../src/styles/base.css";
