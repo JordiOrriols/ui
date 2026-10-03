@@ -65,12 +65,12 @@ export function AppHeader({
             )}
           </div>
         </div>
-        {navigation && (
-          <div className="border-t border-border">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">{navigation}</div>
-          </div>
-        )}
       </div>
+      {navigation && (
+        <div className="border-t border-border">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">{navigation}</div>
+        </div>
+      )}
       {children}
     </header>
   );
