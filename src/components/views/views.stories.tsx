@@ -11,7 +11,23 @@ import { ConfirmDialog } from "./ConfirmDialog";
 import { Modal } from "./Modal";
 import { AppHeader } from "./AppHeader";
 
-export default { title: "Views/Ladders", tags: ["autodocs"] } satisfies Meta;
+export default {
+  title: "Views/Ladders",
+  tags: ["autodocs"],
+  subcomponents: {
+    EmptyState,
+    SplitButton,
+    LanguageSelector,
+    Spinner,
+    UserAvatar,
+    ProgressIndicator,
+    StatusBadge,
+    ButtonGroup,
+    ConfirmDialog,
+    Modal,
+    AppHeader,
+  },
+} satisfies Meta;
 type Story = StoryObj;
 export const IndividualEmptyState: Story = {
   render: () => (

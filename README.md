@@ -110,6 +110,10 @@ exports. They are not substitutes for the entire Radix API.
 Views take text and callbacks as props. They do not import an application router,
 translation provider, database tables, repository, credentials or Supabase client.
 Storybook covers the styled views and all official Radix namespaces.
+Grouped stories register their components through Storybook's `subcomponents`
+metadata, including each exported AlertDialog and Tabs part. The Storybook
+coverage test checks every styled component export and official Radix namespace;
+when adding a component, add its example and metadata in the same change.
 
 ### Shared hooks
 

@@ -40,6 +40,7 @@ export default {
   title: "Views/Auth",
   tags: ["autodocs"],
   excludeStories: ["loginLabels"],
+  subcomponents: { LoginDialog, PasswordResetDialog, NameDialog },
 } satisfies Meta;
 type Story = StoryObj;
 

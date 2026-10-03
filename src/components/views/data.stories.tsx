@@ -8,7 +8,18 @@ import { useShareAccessForm } from "../../hooks/useShareAccessForm";
 import { LevelSelector } from "./LevelSelector";
 import { ReferenceDialog } from "./ReferenceDialog";
 
-export default { title: "Views/Data display", tags: ["autodocs"] } satisfies Meta;
+export default {
+  title: "Views/Data display",
+  tags: ["autodocs"],
+  subcomponents: {
+    RadarChart,
+    ProfileCard,
+    CommentGroups,
+    ShareAccessDialog,
+    LevelSelector,
+    ReferenceDialog,
+  },
+} satisfies Meta;
 type Story = StoryObj;
 const axes = ["Quality", "Reliability", "Speed", "Collaboration"];
 const series = [
