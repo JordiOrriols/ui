@@ -27,4 +27,18 @@ function LanguageMenu() {
   );
 }
 
+function SharedLanguagesMenu() {
+  const [value, setValue] = useState("en");
+  return (
+    <LanguageSelector
+      value={value}
+      onValueChange={setValue}
+      label="Language"
+      className="inline-flex"
+    />
+  );
+}
+
+export const SharedLanguages: Story = { render: () => <SharedLanguagesMenu /> };
+
 export const Interactive: Story = { render: () => <LanguageMenu /> };

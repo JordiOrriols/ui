@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { ButtonGroup } from "./ButtonGroup";
 import { SplitButton } from "./SplitButton";
 import { LanguageSelector } from "./LanguageSelector";
+import { APP_LANGUAGES } from "../../lib/languages";
 import { Spinner, UserAvatar, ProgressIndicator, StatusBadge } from "./indicators";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { Modal } from "./Modal";
@@ -115,6 +116,14 @@ describe("copied presentation views", () => {
     );
     await userEvent.click(screen.getByRole("menuitemradio", { name: "Spanish" }));
     expect(change).toHaveBeenCalledWith("es");
+  });
+  it("offers the shared app languages by default", async () => {
+    render(<LanguageSelector value="de-DE" onValueChange={vi.fn()} label="Language" />);
+    expect(screen.getByRole("button", { name: "Language" })).toHaveTextContent("DE");
+    await userEvent.click(screen.getByRole("button", { name: "Language" }));
+    expect(screen.getAllByRole("menuitemradio").map((item) => item.textContent)).toEqual(
+      APP_LANGUAGES.map((language) => language.label)
+    );
   });
   it("renders accessible loading, avatar fallbacks and badges", () => {
     render(

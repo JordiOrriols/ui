@@ -108,7 +108,7 @@ exports. They are not substitutes for the entire Radix API.
 - `ConfirmDialog`, `NameDialog`, `Modal`: reusable dialog layouts
 - `EmptyState`: icon, translated text and action slots
 - `SplitButton`, `ButtonGroup`: host-controlled actions and filters
-- `LanguageSelector`: host-provided languages and selection callback
+- `LanguageSelector`: selection callback with the shared `APP_LANGUAGES` (en, es, ca, fr, de, it) by default; pass `languages` to override
 - `AppHeader`: branding and action slots
 - `UserAvatar`, `Spinner`, `ProgressIndicator`, `StatusBadge`: display indicators
 - `ProfileCard`, `RadarChart`, `CommentGroups`: data display without app-specific schemas

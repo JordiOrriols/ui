@@ -3,21 +3,18 @@ import { Check, ChevronDown, Globe } from "lucide-react";
 import { buttonVariants } from "../ui/button";
 import { cn } from "../../lib/utils";
 import { trackButtonClick } from "../../utils/analytics";
+import { APP_LANGUAGES, type LanguageOption } from "../../lib/languages";
 
-export interface LanguageOption {
-  code: string;
-  short: string;
-  label: string;
-}
+export type { LanguageOption };
 
 export function LanguageSelector({
-  languages,
+  languages = APP_LANGUAGES,
   value,
   onValueChange,
   label,
   className = "hidden sm:inline-flex",
 }: {
-  languages: LanguageOption[];
+  languages?: LanguageOption[];
   value: string;
   onValueChange: (language: string) => void;
   label: string;
