@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { LayoutGrid } from "lucide-react";
+import { ArrowLeft, LayoutGrid } from "lucide-react";
 import { AppHeader } from "./AppHeader";
 import { LanguageSelector } from "./LanguageSelector";
 
@@ -86,4 +86,18 @@ export const DisabledAccountAction: Story = {
 
 export const WithoutAccountOrNavigation: Story = {
   render: () => <AppHeader title="Field Notes" subtitle="Workspace" icon={<LayoutGrid />} />,
+};
+
+export const WithBackButton: Story = {
+  render: () => (
+    <AppHeader
+      title="Self evaluation"
+      icon={<LayoutGrid />}
+      leading={
+        <button type="button" aria-label="Go back" className="rounded-md p-2 hover:bg-muted">
+          <ArrowLeft className="h-5 w-5" />
+        </button>
+      }
+    />
+  ),
 };

@@ -9,10 +9,12 @@ export function AppHeader({
   actions,
   accountAction,
   navigation,
+  leading,
+  testId = "header",
   children,
 }: {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   icon: ReactNode;
   actions?: ReactNode;
   accountAction?: {
@@ -23,13 +25,17 @@ export function AppHeader({
     title?: string;
   };
   navigation?: ReactNode;
+  /** Rendered before the brand icon, e.g. a back button. */
+  leading?: ReactNode;
+  testId?: string;
   children?: ReactNode;
 }) {
   return (
-    <header className="bg-background border-b border-border sticky top-0 z-40" data-testid="header">
+    <header className="bg-background border-b border-border sticky top-0 z-40" data-testid={testId}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-center justify-between min-h-16 py-3 gap-3">
           <div className="flex items-center gap-3" data-testid="header-content">
+            {leading}
             <div className="w-10 h-10 shrink-0 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white [&_svg]:size-5">
               {icon}
             </div>
@@ -37,12 +43,14 @@ export function AppHeader({
               <h1 className="text-lg font-semibold text-foreground" data-testid="header-title">
                 {title}
               </h1>
-              <p className="text-xs text-muted-foreground" data-testid="header-subtitle">
-                {subtitle}
-              </p>
+              {subtitle && (
+                <p className="text-xs text-muted-foreground" data-testid="header-subtitle">
+                  {subtitle}
+                </p>
+              )}
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-end gap-2">
             {actions}
             {accountAction && (
               <Button

@@ -83,4 +83,20 @@ describe("shared application shell", () => {
     expect(screen.getByTestId("sign-in-button")).toHaveAccessibleName("Sign in");
     expect(screen.getByTestId("sign-in-button")).toBeDisabled();
   });
+  it("renders a leading slot before the brand, an optional subtitle and a custom test id", () => {
+    render(
+      <AppHeader
+        title="Evaluation"
+        icon={<LayoutGrid data-testid="brand-icon" />}
+        leading={<button>Back</button>}
+        testId="assessment-header"
+      />
+    );
+    expect(screen.getByTestId("assessment-header")).toBeInTheDocument();
+    expect(screen.queryByTestId("header-subtitle")).not.toBeInTheDocument();
+    const position = screen
+      .getByRole("button", { name: "Back" })
+      .compareDocumentPosition(screen.getByTestId("brand-icon"));
+    expect(position & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
 });

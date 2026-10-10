@@ -137,7 +137,9 @@ addition to the metadata contracts.
 `WelcomeScreen` is the shared Planner-style welcome view: inject branding,
 feature descriptions, translated action labels and authentication callbacks.
 `AppHeader` standardizes title/subtitle and icon sizes, account actions and an
-optional navigation row below the brand/language/account row. Both views are
+optional navigation row below the brand/language/account row. The subtitle is
+optional, `leading` renders content such as a back button before the brand
+icon, and `testId` overrides the default `header` test id. Both views are
 presentation-only; consumers own routing, localization and authentication.
 
 ### Shared hooks
