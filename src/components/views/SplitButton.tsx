@@ -21,6 +21,7 @@ export interface SplitButtonProps {
   disabled?: boolean;
   menuLabel: string;
   variant?: "default" | "outline";
+  menuModal?: boolean;
 }
 
 export function SplitButton({
@@ -32,6 +33,7 @@ export function SplitButton({
   disabled = false,
   menuLabel,
   variant = "default",
+  menuModal = true,
 }: SplitButtonProps) {
   return (
     <div className="inline-flex shrink-0">
@@ -47,7 +49,7 @@ export function SplitButton({
         {icon}
         {label}
       </Button>
-      <DropdownMenu.Root>
+      <DropdownMenu.Root modal={menuModal}>
         <DropdownMenu.Trigger asChild>
           <Button
             eventId={`${eventId}_menu`}

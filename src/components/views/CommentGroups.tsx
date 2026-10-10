@@ -9,10 +9,12 @@ export function CommentGroups({
   groups,
   categories,
   title,
+  commentAction,
 }: {
   groups: CommentGroup[];
   categories: readonly string[];
   title: string;
+  commentAction?: (group: CommentGroup, category: string) => ReactNode;
 }) {
   const visible = categories.filter((category) =>
     groups.some((group) => group.comments[category]?.trim())
@@ -34,6 +36,7 @@ export function CommentGroups({
               >
                 <p className="text-[11px] font-medium text-slate-500">{group.label}</p>
                 <p className="mt-1 whitespace-pre-wrap text-sm text-slate-700">{comment}</p>
+                {commentAction?.(group, category)}
               </div>
             ) : null;
           })}
@@ -42,3 +45,4 @@ export function CommentGroups({
     </section>
   );
 }
+import type { ReactNode } from "react";

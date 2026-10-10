@@ -35,6 +35,15 @@ The path is relative to your main CSS file. If you keep it elsewhere, adjust it.
 
 ### Import Components
 
+`AppFooter` provides reusable attribution with an optional translated `text`.
+`AlertModal` provides accessible feedback with host-owned `isOpen`, `title`,
+`description`, `closeLabel` and `onClose`, using the existing alert-dialog
+primitives rather than native JavaScript alerts. Each has its own Storybook entry.
+`CommentGroups` accepts an optional `commentAction(group, category)` slot for
+host-owned moderation controls; it does not persist or enforce permissions.
+For split menus that open a modal, use `menuModal={false}` on `SplitButton` to
+avoid overlapping modal focus/pointer locks. Other menus keep the existing default.
+
 ```tsx
 import { Button, buttonVariants, cn, configureAnalytics } from "@jordiorriols/ui";
 
