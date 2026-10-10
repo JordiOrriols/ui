@@ -11,6 +11,9 @@ export {
   configureAnalytics,
   trackEvent,
   trackButtonClick,
+  isAutomatedBrowser,
+  loadUmami,
+  type UmamiOptions,
   type AnalyticsEventData,
   type AnalyticsSink,
 } from "./utils/analytics";

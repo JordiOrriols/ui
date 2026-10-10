@@ -165,7 +165,12 @@ callbacks without knowing any tables or assuming specific permission values.
 Escape/overlay behavior; use the Radix-backed `Modal` for new generic dialogs.
 
 Umami analytics already uses the shared `configureAnalytics` / `trackEvent`
-adapter. The host app owns the Umami script and website identifier.
+adapter. The host app owns the website identifier and loads the tracker at boot
+with `loadUmami({ websiteId })` instead of a `<script>` tag in `index.html`.
+
+Automated browsers (Playwright, Selenium, Puppeteer…) set `navigator.webdriver`,
+so `loadUmami` skips the tracker and the default sink drops every event: e2e runs
+never reach Umami. `isAutomatedBrowser()` exposes the same check.
 
 ### Local development across sibling projects
 

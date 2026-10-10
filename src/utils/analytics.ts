@@ -6,6 +6,9 @@
  * talks to the Umami snippet that the host page loads, which is the setup both
  * projects use. Apps with a different backend can swap the sink at boot.
  *
+ * Automated browsers (Playwright, Selenium, Puppeteer…) expose
+ * `navigator.webdriver`, so test runs never load Umami nor report events.
+ *
  * @see https://umami.is/docs/tracking-functions
  */
 
@@ -25,8 +28,41 @@ export type AnalyticsEventData = Record<string, string | number | boolean>;
  */
 export type AnalyticsSink = (eventId: string, eventData?: AnalyticsEventData) => void;
 
+const UMAMI_SCRIPT_URL = "https://cloud.umami.is/script.js";
+
+/** True when the page is driven by a test runner such as Playwright. */
+export function isAutomatedBrowser(): boolean {
+  return typeof navigator !== "undefined" && navigator.webdriver === true;
+}
+
+export interface UmamiOptions {
+  websiteId: string;
+  /** Script URL, for self-hosted Umami instances. */
+  src?: string;
+}
+
+/**
+ * Load the Umami tracker, unless the browser is automated. Use this instead of
+ * a `<script>` tag in `index.html`, otherwise test runs record page views.
+ *
+ * @returns whether the tracker is (or already was) on the page.
+ */
+export function loadUmami({ websiteId, src = UMAMI_SCRIPT_URL }: UmamiOptions): boolean {
+  if (typeof document === "undefined" || isAutomatedBrowser()) return false;
+  const loaded = Array.from(
+    document.querySelectorAll<HTMLScriptElement>("script[data-website-id]")
+  ).some((script) => script.dataset.websiteId === websiteId);
+  if (loaded) return true;
+  const script = document.createElement("script");
+  script.defer = true;
+  script.src = src;
+  script.dataset.websiteId = websiteId;
+  document.head.appendChild(script);
+  return true;
+}
+
 const defaultSink: AnalyticsSink = (eventId, eventData) => {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || isAutomatedBrowser()) return;
 
   if (window.umami) {
     window.umami.track(eventId, eventData);
