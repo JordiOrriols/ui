@@ -7,6 +7,15 @@ export { cn } from "./lib/utils";
 export { APP_LANGUAGES } from "./lib/languages";
 export { PROJECTS, getProjectUrl, type ProjectId } from "./lib/projects";
 export {
+  createWorkspaceApi,
+  type WorkspaceApi,
+  type WorkspaceSummary,
+  type WorkspaceShare,
+  type WorkspaceAccessLevel,
+  type WorkspaceShareAccess,
+} from "./lib/workspaces";
+export { getWorkspaceLabels, type WorkspaceLabels } from "./lib/workspace-labels";
+export {
   getAuthRedirectUrl,
   getAuthCallbackDestination,
   redirectAuthCallback,

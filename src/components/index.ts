@@ -26,5 +26,7 @@ export * from "./views/RadarChart";
 export * from "./views/ProfileCard";
 export * from "./views/CommentGroups";
 export * from "./views/ShareAccessDialog";
+export * from "./views/WorkspaceBar";
+export * from "./views/WorkspaceShareDialog";
 export * from "./views/LevelSelector";
 export * from "./views/ReferenceDialog";

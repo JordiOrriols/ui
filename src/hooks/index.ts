@@ -4,3 +4,4 @@ export * from "./useLoginForm";
 export * from "./usePasswordResetForm";
 export * from "./useNameForm";
 export * from "./useShareAccessForm";
+export * from "./useWorkspaceList";
