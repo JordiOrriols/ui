@@ -53,6 +53,7 @@ describe("Storybook component coverage", () => {
     "AlertDialogHeader",
     "AlertDialogTitle",
     "AlertDialogTrigger",
+    "AppMain",
     "AppNavigationItem",
     "TabsContent",
     "TabsList",

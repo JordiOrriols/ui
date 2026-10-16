@@ -26,6 +26,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --color-background: var(--background);
+  --color-page: var(--page);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -67,6 +68,8 @@
 
   /* Light mode colors (neutral palette) */
   --background: oklch(1 0 0);
+  /* App body behind white cards, header and navigation: a cool, very light gray. */
+  --page: oklch(0.984 0.003 247.858);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -105,6 +108,7 @@
 
 .dark {
   --background: oklch(0.145 0 0);
+  --page: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
