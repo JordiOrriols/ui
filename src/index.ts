@@ -20,6 +20,12 @@ export {
   getAuthCallbackDestination,
   redirectAuthCallback,
 } from "./lib/authRedirect";
+export {
+  readAuthCallback,
+  takeAuthCallback,
+  completeAuthCallback,
+  type AuthCallback,
+} from "./lib/authCallback";
 
 // Analytics
 export {

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
+import { completeAuthCallback, type AuthCallback } from "../lib/authCallback";
 
 export type AuthClient = Pick<SupabaseClient, "auth">;
 
@@ -12,17 +13,27 @@ export interface AuthActions {
   signOut(): Promise<void>;
 }
 
-export function useSupabaseAuth(client: AuthClient | null, redirectTo?: string) {
+/**
+ * `callback` is what `takeAuthCallback()` found in the URL when the app loaded: it is completed
+ * once, a recovery opens `passwordRecovery`, and a link that fails is reported in `linkError`.
+ */
+export function useSupabaseAuth(
+  client: AuthClient | null,
+  redirectTo?: string,
+  callback?: AuthCallback | null
+) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(!!client);
   const [passwordRecovery, setPasswordRecovery] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [linkError, setLinkError] = useState<string | null>(null);
 
   useEffect(() => {
     setUser(null);
     setLoading(!!client);
     setPasswordRecovery(false);
     setAuthError(null);
+    setLinkError(null);
     if (!client) return;
     let active = true;
     let revision = 0;
@@ -34,9 +45,19 @@ export function useSupabaseAuth(client: AuthClient | null, redirectTo?: string) 
       setAuthError(null);
       if (event === "PASSWORD_RECOVERY") setPasswordRecovery(true);
       if (event === "SIGNED_OUT") setPasswordRecovery(false);
+      if (event === "SIGNED_IN" || event === "PASSWORD_RECOVERY") setLinkError(null);
     });
     const initialRevision = revision;
     const restore = async () => {
+      if (callback) {
+        try {
+          const { recovery } = await completeAuthCallback(client, callback);
+          if (active && recovery) setPasswordRecovery(true);
+        } catch (error) {
+          if (active) setLinkError(error instanceof Error ? error.message : String(error));
+        }
+        if (!active) return;
+      }
       try {
         const { data: sessionData, error } = await client.auth.getSession();
         if (!active || revision !== initialRevision) return;
@@ -56,7 +77,7 @@ export function useSupabaseAuth(client: AuthClient | null, redirectTo?: string) 
       active = false;
       data.subscription.unsubscribe();
     };
-  }, [client]);
+  }, [client, callback]);
 
   const actions = useMemo<AuthActions>(() => {
     const requireClient = () => {
@@ -103,5 +124,13 @@ export function useSupabaseAuth(client: AuthClient | null, redirectTo?: string) 
     };
   }, [client, redirectTo]);
 
-  return { authEnabled: !!client, user, loading, passwordRecovery, authError, ...actions };
+  return {
+    authEnabled: !!client,
+    user,
+    loading,
+    passwordRecovery,
+    authError,
+    linkError,
+    ...actions,
+  };
 }

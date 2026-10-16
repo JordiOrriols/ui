@@ -150,4 +150,33 @@ describe("shared Supabase authentication", () => {
     expect(result.current.passwordRecovery).toBe(false);
     expect(result.current.user).toBeNull();
   });
+  it("opens password recovery after signing in with a recovery link", async () => {
+    const f = fixture();
+    const setSession = vi.spyOn(f.client.auth, "setSession").mockImplementation(async () => {
+      f.emit("SIGNED_IN", session);
+      return { data: { session, user }, error: null };
+    });
+    const link = {
+      kind: "session",
+      accessToken: "at",
+      refreshToken: "rt",
+      recovery: true,
+    } as const;
+    const { result } = renderHook(() => useSupabaseAuth(f.client, undefined, link));
+    await waitFor(() => expect(result.current.passwordRecovery).toBe(true));
+    expect(setSession).toHaveBeenCalledWith({ access_token: "at", refresh_token: "rt" });
+    expect(result.current.user).toEqual(user);
+    expect(result.current.linkError).toBeNull();
+  });
+  it("reports a link that did not work instead of ignoring it", async () => {
+    const f = fixture();
+    const link = { kind: "error", message: "Email link is invalid or has expired" } as const;
+    const { result } = renderHook(() => useSupabaseAuth(f.client, undefined, link));
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.linkError).toBe("Email link is invalid or has expired");
+    expect(result.current.passwordRecovery).toBe(false);
+    expect(result.current.authError).toBeNull();
+    await act(async () => f.emit("SIGNED_IN", session));
+    expect(result.current.linkError).toBeNull();
+  });
 });

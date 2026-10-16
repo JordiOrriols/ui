@@ -100,6 +100,16 @@ OAuth and recovery then carry `auth_app` to their requesting origin. Only
 registered apps can receive misplaced callbacks; arbitrary URLs are not accepted.
 PKCE must be exchanged in the browser/origin where the flow began.
 
+Then call `takeAuthCallback()` (still before the router renders, so a hash
+router cannot swallow `#access_token=…`), create the client with
+`detectSessionInUrl: false` and pass the result as `useSupabaseAuth`'s third
+argument. It understands PKCE codes (`?code=`), implicit tokens
+(`#access_token=…`, for example a recovery sent from the Supabase dashboard),
+email token hashes (`?token_hash=…&type=…`, which work on any device) and link
+errors. Each link is used once; recoveries open `passwordRecovery`, and links
+that fail (expired, already used, or a PKCE link opened in another browser) are
+reported as `linkError`, which the welcome page should show.
+
 In Supabase **Authentication > URL Configuration**, allow each exact app URL
 and its `?auth_app=...` callback (plus approved localhost URLs). Set a valid
 Site URL, but do not rely on that single fallback for multiple apps.
@@ -177,7 +187,7 @@ presentation-only; consumers own routing, localization and authentication.
 import { useSupabaseAuth, useLoginForm } from "@jordiorriols/ui/hooks";
 ```
 
-`useSupabaseAuth(client, redirectTo?)` takes an app-owned Supabase client and
+`useSupabaseAuth(client, redirectTo?, callback?)` takes an app-owned Supabase client and
 provides session restoration, auth subscriptions, password/GitHub sign-in,
 sign-up, recovery, password updates and sign-out. The default redirect is the
 current origin and pathname, as in Ladders. Configure a redirect explicitly for
