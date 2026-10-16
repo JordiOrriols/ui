@@ -85,6 +85,35 @@ export default {
 
 ## Components
 
+### Shared project navigation, authentication and loading
+
+`PROJECTS` in `src/lib/projects.ts` is the single registry for project IDs,
+names, icons and canonical URLs. Add a project there and release/update this
+package in each consumer; no consumer-owned menu list is needed. Pass
+`projectId="planner"` or `projectId="ladders"` to `AppHeader` to enable its icon
+dropdown. `getProjectUrl("planner")` also supplies cross-app vacation links.
+
+Before creating a Supabase client, call `redirectAuthCallback(projectId)` and
+skip client creation if it returns true (navigation is in progress). Pass
+`getAuthRedirectUrl(projectId)` as `useSupabaseAuth`'s second argument. Signup,
+OAuth and recovery then carry `auth_app` to their requesting origin. Only
+registered apps can receive misplaced callbacks; arbitrary URLs are not accepted.
+PKCE must be exchanged in the browser/origin where the flow began.
+
+In Supabase **Authentication > URL Configuration**, allow each exact app URL
+and its `?auth_app=...` callback (plus approved localhost URLs). Set a valid
+Site URL, but do not rely on that single fallback for multiple apps.
+Confirmation/recovery templates must use `{{ .RedirectTo }}` rather than
+hard-coding `{{ .SiteURL }}` for their destination. Keep the generated
+`{{ .ConfirmationURL }}` verification link intact. If using a custom link,
+preserve `redirect_to` and verify the token through Supabase.
+Old emails without an app parameter cannot reliably identify their source app;
+request a new email after correcting the URL allow-list and templates.
+
+`Skeleton` provides pulse placeholders (with reduced-motion support).
+`AppSkeleton` includes an accessible loading status and a full app shell;
+use `fullPage={false}` inside an already-rendered layout.
+
 ### Official Radix primitives (unchanged)
 
 ```tsx
