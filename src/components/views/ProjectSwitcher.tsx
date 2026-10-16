@@ -1,25 +1,24 @@
 import type { ReactNode } from "react";
 import { DropdownMenu } from "radix-ui";
-import { Check, ChevronDown } from "lucide-react";
+import { Check } from "lucide-react";
 import { PROJECTS, type ProjectId } from "../../lib/projects";
 
 export function ProjectSwitcher({
   projectId,
-  children,
   label = "Switch project",
 }: {
   projectId: ProjectId;
-  children: ReactNode;
+  children?: ReactNode;
   label?: string;
 }) {
+  const Icon = PROJECTS.find((project) => project.id === projectId)!.icon;
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger
         aria-label={label}
         className="relative flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-sky-700 text-white outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [&>svg]:size-5"
       >
-        {children}
-        <ChevronDown className="absolute bottom-0.5 right-0.5 !size-2.5" />
+        <Icon />
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content

@@ -20,4 +20,18 @@ describe("shared project directory", () => {
     await userEvent.keyboard("{Escape}");
     expect(screen.getByRole("button", { name: "Switch project" })).toHaveFocus();
   });
+
+  it("uses the registry growth icon in both Ladders locations without a chevron", async () => {
+    render(
+      <AppHeader title="Ladders" icon={<span>Ignored custom icon</span>} projectId="ladders" />
+    );
+    const trigger = screen.getByRole("button", { name: "Switch project" });
+    expect(trigger.querySelector("svg.lucide-trending-up")).not.toBeNull();
+    expect(trigger.querySelectorAll("svg")).toHaveLength(1);
+    expect(screen.queryByText("Ignored custom icon")).not.toBeInTheDocument();
+    await userEvent.click(trigger);
+    expect(
+      screen.getByRole("menuitem", { name: "Ladders" }).querySelector("svg.lucide-trending-up")
+    ).not.toBeNull();
+  });
 });

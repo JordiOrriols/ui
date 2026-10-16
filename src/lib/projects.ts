@@ -1,11 +1,11 @@
-import { ChartNoAxesColumnIncreasing, GanttChartSquare } from "lucide-react";
+import { TrendingUp, GanttChartSquare } from "lucide-react";
 
 export const PROJECTS = [
   {
     id: "ladders",
     name: "Ladders",
     url: "https://ladders.jordiorriols.cat/",
-    icon: ChartNoAxesColumnIncreasing,
+    icon: TrendingUp,
   },
   {
     id: "planner",
