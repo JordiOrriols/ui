@@ -5,6 +5,7 @@ export * as Radix from "./radix";
 // Utilities
 export { cn } from "./lib/utils";
 export { APP_LANGUAGES } from "./lib/languages";
+export { PROJECTS, getProjectUrl, type ProjectId } from "./lib/projects";
 
 // Analytics
 export {
