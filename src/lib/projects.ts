@@ -1,4 +1,4 @@
-import { TrendingUp, GanttChartSquare } from "lucide-react";
+import { TrendingUp, GanttChartSquare, HeartPulse } from "lucide-react";
 
 export const PROJECTS = [
   {
@@ -12,6 +12,12 @@ export const PROJECTS = [
     name: "Planner",
     url: "https://planner.jordiorriols.cat/",
     icon: GanttChartSquare,
+  },
+  {
+    id: "pulse",
+    name: "Pulse",
+    url: "https://pulse.jordiorriols.cat/",
+    icon: HeartPulse,
   },
 ] as const;
 

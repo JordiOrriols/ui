@@ -20,6 +20,12 @@ describe("app-scoped authentication redirects", () => {
     expect(
       getAuthCallbackDestination(
         "planner",
+        "https://planner.jordiorriols.cat/?auth_app=pulse&code=test"
+      )
+    ).toBe("https://pulse.jordiorriols.cat/?auth_app=pulse&code=test");
+    expect(
+      getAuthCallbackDestination(
+        "planner",
         "https://planner.jordiorriols.cat/?auth_app=ladders#access_token=test&type=recovery"
       )
     ).toBe("https://ladders.jordiorriols.cat/?auth_app=ladders#access_token=test&type=recovery");

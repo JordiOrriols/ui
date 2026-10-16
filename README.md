@@ -90,7 +90,7 @@ export default {
 `PROJECTS` in `src/lib/projects.ts` is the single registry for project IDs,
 names, icons and canonical URLs. Add a project there and release/update this
 package in each consumer; no consumer-owned menu list is needed. Pass
-`projectId="planner"` or `projectId="ladders"` to `AppHeader` to enable its icon
+`projectId="planner"`, `projectId="ladders"` or `projectId="pulse"` to `AppHeader` to enable its icon
 dropdown. `getProjectUrl("planner")` also supplies cross-app vacation links.
 
 Before creating a Supabase client, call `redirectAuthCallback(projectId)` and

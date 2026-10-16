@@ -21,6 +21,21 @@ describe("shared project directory", () => {
     expect(screen.getByRole("button", { name: "Switch project" })).toHaveFocus();
   });
 
+  it("lists Pulse with its heart icon and marks it current inside Pulse", async () => {
+    render(<AppHeader title="Pulse" icon={<span>P</span>} projectId="pulse" />);
+    const trigger = screen.getByRole("button", { name: "Switch project" });
+    expect(trigger.querySelector("svg.lucide-heart-pulse")).not.toBeNull();
+    await userEvent.click(trigger);
+    expect(screen.getAllByRole("menuitem").map((item) => item.textContent)).toEqual([
+      "Ladders",
+      "Planner",
+      "Pulse",
+    ]);
+    const pulse = screen.getByRole("menuitem", { name: "Pulse" });
+    expect(pulse).toHaveAttribute("href", "https://pulse.jordiorriols.cat/");
+    expect(pulse).toHaveAttribute("aria-current", "page");
+  });
+
   it("uses the registry growth icon in both Ladders locations without a chevron", async () => {
     render(
       <AppHeader title="Ladders" icon={<span>Ignored custom icon</span>} projectId="ladders" />
