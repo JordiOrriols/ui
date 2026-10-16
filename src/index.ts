@@ -6,6 +6,11 @@ export * as Radix from "./radix";
 export { cn } from "./lib/utils";
 export { APP_LANGUAGES } from "./lib/languages";
 export { PROJECTS, getProjectUrl, type ProjectId } from "./lib/projects";
+export {
+  getAuthRedirectUrl,
+  getAuthCallbackDestination,
+  redirectAuthCallback,
+} from "./lib/authRedirect";
 
 // Analytics
 export {
