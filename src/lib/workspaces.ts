@@ -1,8 +1,9 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { PROJECTS, type ProjectId } from "./projects";
 
-export type WorkspaceAccessLevel = "owner" | "editor" | "viewer";
-export type WorkspaceShareAccess = Exclude<WorkspaceAccessLevel, "owner">;
+/** `member`: a team member linked to the account, who only reaches their own pages. */
+export type WorkspaceAccessLevel = "owner" | "editor" | "viewer" | "member";
+export type WorkspaceShareAccess = "editor" | "viewer";
 
 export interface WorkspaceSummary {
   id: string;
@@ -19,7 +20,7 @@ export interface WorkspaceShare {
 }
 
 const APP_IDS: readonly string[] = PROJECTS.map((project) => project.id);
-const ACCESS_LEVELS: readonly string[] = ["owner", "editor", "viewer"];
+const ACCESS_LEVELS: readonly string[] = ["owner", "editor", "viewer", "member"];
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;

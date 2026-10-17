@@ -84,6 +84,23 @@ describe("WorkspaceBar", () => {
     expect(screen.queryByRole("button", { name: "Share" })).not.toBeInTheDocument();
   });
 
+  it("shows linked team members their access without sharing", () => {
+    const member: WorkspaceSummary = { ...SHARED, access_level: "member" };
+    render(
+      <WorkspaceBar
+        api={fakeApi()}
+        app="ladders"
+        workspaces={[member]}
+        value={member.id}
+        labels={labels}
+        onValueChange={vi.fn()}
+        onCreated={vi.fn()}
+      />
+    );
+    expect(screen.getByRole("button", { name: "Workspace" })).toHaveTextContent("Member");
+    expect(screen.queryByRole("button", { name: "Share" })).not.toBeInTheDocument();
+  });
+
   it("creates a workspace from its name", async () => {
     const api = fakeApi();
     const props = renderBar(api);
@@ -201,6 +218,11 @@ describe("createWorkspaceApi", () => {
       owner_id: "me",
       access_level: "owner",
     });
+    const member = { id: "w1", name: "Lead", owner_id: "x", access_level: "member" };
+    await expect(client([member]).api.listWorkspaces("ladders")).resolves.toEqual([member]);
+    await expect(
+      client([{ ...member, access_level: "admin" }]).api.listWorkspaces("ladders")
+    ).rejects.toThrow("Unexpected workspace row");
     await expect(client([{ id: "w1" }]).api.listWorkspaces("ladders")).rejects.toThrow(
       "Unexpected workspace row"
     );

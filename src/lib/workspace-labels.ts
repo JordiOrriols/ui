@@ -2,7 +2,7 @@ export interface WorkspaceLabels {
   workspace: string;
   newWorkspace: string;
   share: string;
-  access: { owner: string; editor: string; viewer: string };
+  access: { owner: string; editor: string; viewer: string; member: string };
   create: { title: string; description: string; name: string; cancel: string; submit: string };
   shareDialog: {
     title: (workspace: string) => string;
@@ -25,7 +25,7 @@ const en: WorkspaceLabels = {
   workspace: "Workspace",
   newWorkspace: "New workspace",
   share: "Share",
-  access: { owner: "Owner", editor: "Editor", viewer: "Viewer" },
+  access: { owner: "Owner", editor: "Editor", viewer: "Viewer", member: "Member" },
   create: {
     title: "New workspace",
     description: "A workspace holds your teams and everything planned for them.",
@@ -55,7 +55,7 @@ const es: WorkspaceLabels = {
   workspace: "Espacio de trabajo",
   newWorkspace: "Nuevo espacio de trabajo",
   share: "Compartir",
-  access: { owner: "Propietario", editor: "Editor", viewer: "Lector" },
+  access: { owner: "Propietario", editor: "Editor", viewer: "Lector", member: "Miembro" },
   create: {
     title: "Nuevo espacio de trabajo",
     description: "Un espacio de trabajo agrupa tus equipos y todo lo que planificas para ellos.",
@@ -85,7 +85,7 @@ const ca: WorkspaceLabels = {
   workspace: "Espai de treball",
   newWorkspace: "Nou espai de treball",
   share: "Compartir",
-  access: { owner: "Propietari", editor: "Editor", viewer: "Lector" },
+  access: { owner: "Propietari", editor: "Editor", viewer: "Lector", member: "Membre" },
   create: {
     title: "Nou espai de treball",
     description: "Un espai de treball agrupa els teus equips i tot el que planifiques per a ells.",
@@ -115,7 +115,7 @@ const fr: WorkspaceLabels = {
   workspace: "Espace de travail",
   newWorkspace: "Nouvel espace de travail",
   share: "Partager",
-  access: { owner: "Propriétaire", editor: "Éditeur", viewer: "Lecteur" },
+  access: { owner: "Propriétaire", editor: "Éditeur", viewer: "Lecteur", member: "Membre" },
   create: {
     title: "Nouvel espace de travail",
     description:
@@ -146,7 +146,7 @@ const de: WorkspaceLabels = {
   workspace: "Arbeitsbereich",
   newWorkspace: "Neuer Arbeitsbereich",
   share: "Teilen",
-  access: { owner: "Eigentümer", editor: "Bearbeiter", viewer: "Betrachter" },
+  access: { owner: "Eigentümer", editor: "Bearbeiter", viewer: "Betrachter", member: "Mitglied" },
   create: {
     title: "Neuer Arbeitsbereich",
     description: "Ein Arbeitsbereich enthält Ihre Teams und alles, was Sie für sie planen.",
@@ -176,7 +176,7 @@ const it: WorkspaceLabels = {
   workspace: "Spazio di lavoro",
   newWorkspace: "Nuovo spazio di lavoro",
   share: "Condividi",
-  access: { owner: "Proprietario", editor: "Editor", viewer: "Lettore" },
+  access: { owner: "Proprietario", editor: "Editor", viewer: "Lettore", member: "Membro" },
   create: {
     title: "Nuovo spazio di lavoro",
     description: "Uno spazio di lavoro raccoglie i tuoi team e tutto ciò che pianifichi per loro.",
