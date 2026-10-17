@@ -26,6 +26,12 @@ export {
   completeAuthCallback,
   type AuthCallback,
 } from "./lib/authCallback";
+export {
+  createSharedSupabaseClient,
+  createCookieStorage,
+  sharedSessionDomain,
+  SHARED_SESSION_DOMAIN,
+} from "./lib/sharedSession";
 
 // Analytics
 export {
