@@ -30,10 +30,23 @@ describe("shared project directory", () => {
       "Ladders",
       "Planner",
       "Pulse",
+      "Shiplog",
     ]);
     const pulse = screen.getByRole("menuitem", { name: "Pulse" });
     expect(pulse).toHaveAttribute("href", "https://pulse.jordiorriols.cat/");
     expect(pulse).toHaveAttribute("aria-current", "page");
+  });
+
+  it("uses the Shiplog rocket and canonical URL", async () => {
+    render(<AppHeader title="Shiplog" projectId="shiplog" />);
+    expect(
+      screen.getByRole("button", { name: "Switch project" }).querySelector("svg.lucide-rocket")
+    ).not.toBeNull();
+    await userEvent.click(screen.getByRole("button", { name: "Switch project" }));
+    expect(screen.getByRole("menuitem", { name: "Shiplog" })).toHaveAttribute(
+      "href",
+      "https://shiplog.jordiorriols.cat/"
+    );
   });
 
   it("uses the registry growth icon in both Ladders locations without a chevron", async () => {
