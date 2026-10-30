@@ -1,6 +1,6 @@
 name: Publish Package
 
-# Every push to main bumps the patch version and publishes to GitHub Packages,
+# Every push to main publishes the next registry-based patch to GitHub Packages,
 # so consumers can always install the latest state of the library.
 # A version is only published once the verify job is green.
 on:
@@ -8,20 +8,31 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: publish
   cancel-in-progress: false
 
 jobs:
   verify:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    outputs:
+      version: ${{ steps.bump.outputs.version }}
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -41,8 +52,34 @@ jobs:
       - name: Test
         run: npm run test
 
+      - name: Test release version selection
+        run: npm run test:release
+
+      - name: Select next unpublished patch version
+        id: bump
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          versions=$(npm view @jordiorriols/ui versions --json --registry=https://npm.pkg.github.com)
+          version=$(node scripts/next-release-version.mjs "$versions")
+          npm version "$version" --no-git-tag-version --ignore-scripts
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
       - name: Build
         run: npm run build
+
+      - name: Pack verified build
+        run: |
+          mkdir release
+          npm pack --ignore-scripts --pack-destination release
+
+      - name: Upload verified package
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: release-package
+          path: release/*.tgz
+          if-no-files-found: error
+          retention-days: 1
 
   publish:
     needs: verify
@@ -53,46 +90,31 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version-file: .nvmrc
           registry-url: "https://npm.pkg.github.com"
 
-      - name: Configure npm for GitHub Packages
-        run: |
-          echo "@jordiorriols:registry=https://npm.pkg.github.com" >> .npmrc
-          echo "//npm.pkg.github.com/:_authToken=\${NODE_AUTH_TOKEN}" >> .npmrc
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Bump patch version
-        id: bump
-        run: |
-          npm version patch --no-git-tag-version
-          echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
-
-      - name: Build
-        run: npm run build
+      - name: Download verified package
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: release-package
+          path: release
 
       - name: Publish
-        run: npm publish
+        run: npm publish release/*.tgz --ignore-scripts
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Commit version bump and tag
+      - name: Tag published source
+        env:
+          RELEASE_VERSION: ${{ needs.verify.outputs.version }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add package.json package-lock.json
-          # [skip ci] stops this push from re-triggering this workflow, which
-          # would otherwise bump and publish a version on every single push.
-          git commit -m "chore: release v${{ steps.bump.outputs.version }} [skip ci]"
-          git tag "v${{ steps.bump.outputs.version }}"
-          git push
-          git push origin "v${{ steps.bump.outputs.version }}"
+          git tag "v$RELEASE_VERSION" "$GITHUB_SHA"
+          git push origin "refs/tags/v$RELEASE_VERSION"

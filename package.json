@@ -51,6 +51,7 @@
     "prepublishOnly": "npm run build",
     "storybook": "storybook dev -p 6006",
     "test": "vitest run",
+    "test:release": "node --test scripts/next-release-version.test.mjs",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit"

@@ -281,14 +281,23 @@ npm run build-storybook
 
 ## Publishing
 
-The package is automatically published to GitHub Packages when you push a new tag:
+Pushes to `main` and manual runs on `main` verify, build and pack the library
+with read-only repository/package permissions. The release version is one patch
+above the higher of the repository version and the highest published stable
+registry version. Lookup/authentication errors fail the run rather than guessing.
 
-```bash
-git tag v0.1.0
-git push origin v0.1.0
-```
+A separate publisher downloads the verified tarball, publishes with lifecycle
+scripts disabled, and tags the source commit. Only that job receives package
+and contents write permissions; it never installs dependencies, builds code, or
+pushes a version-bump commit to protected `main`. The repository version can lag
+behind releases; a rerun selects a new patch instead of overwriting a release.
+Tag pushes do not trigger publication. Tag rules must permit the workflow to
+create release tags.
+
+Run `npm run test:release` to test version selection. Verification checkouts do
+not persist credentials. Actions are pinned to commit SHAs with weekly Dependabot
+update PRs.
 
 ## License
 
 MIT
-
