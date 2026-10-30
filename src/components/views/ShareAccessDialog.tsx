@@ -49,7 +49,10 @@ export function ShareAccessDialog<T extends string>({
 }) {
   return (
     <AlertDialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <AlertDialogContent className="max-w-2xl" data-testid="share-team-dialog">
+      <AlertDialogContent
+        className="max-w-[min(872px,calc(100%-2rem))]"
+        data-testid="share-team-dialog"
+      >
         <AlertDialogHeader>
           <AlertDialogTitle>{labels.title}</AlertDialogTitle>
           <AlertDialogDescription>{labels.description}</AlertDialogDescription>

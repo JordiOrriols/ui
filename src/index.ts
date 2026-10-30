@@ -16,6 +16,8 @@ export {
   type WorkspaceShareAccess,
 } from "./lib/workspaces";
 export { getWorkspaceLabels, type WorkspaceLabels } from "./lib/workspace-labels";
+export type { WorkspacePublicLinkConfig } from "./components/views/WorkspacePublicLink";
+export type { WorkspaceSharingConfig } from "./components/views/WorkspaceShareDialog";
 export {
   getAuthRedirectUrl,
   getAuthCallbackDestination,
