@@ -7,6 +7,7 @@ import type { WorkspaceLabels } from "../../lib/workspace-labels";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { SelectField } from "../ui/select-field";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { WorkspacePublicLink, type WorkspacePublicLinkConfig } from "./WorkspacePublicLink";
 import {
@@ -20,8 +21,6 @@ import {
 } from "../ui/alert-dialog";
 
 const ALL_APPS = "all";
-const selectClassName =
-  "h-9 w-full rounded-md border border-border bg-card px-3 text-sm disabled:opacity-50";
 
 interface ShareRow {
   userId: string;
@@ -181,35 +180,31 @@ export function WorkspaceShareDialog({
                   </div>
                   <div>
                     <Label htmlFor="share-app">{text.app}</Label>
-                    <select
+                    <SelectField
                       id="share-app"
                       data-testid="share-app-select"
                       value={target}
-                      onChange={(event) =>
-                        setTarget(event.target.value as ProjectId | typeof ALL_APPS)
-                      }
-                      className={`mt-1 ${selectClassName}`}
-                    >
-                      {PROJECTS.map((project) => (
-                        <option key={project.id} value={project.id}>
-                          {project.name}
-                        </option>
-                      ))}
-                      <option value={ALL_APPS}>{text.allApps}</option>
-                    </select>
+                      onValueChange={(value) => setTarget(value as ProjectId | typeof ALL_APPS)}
+                      className="mt-1"
+                      options={[
+                        ...PROJECTS.map((project) => ({ value: project.id, label: project.name })),
+                        { value: ALL_APPS, label: text.allApps },
+                      ]}
+                    />
                   </div>
                   <div>
                     <Label htmlFor="share-access">{text.permission}</Label>
-                    <select
+                    <SelectField
                       id="share-access"
                       data-testid="share-access-select"
                       value={access}
-                      onChange={(event) => setAccess(event.target.value as WorkspaceShareAccess)}
-                      className={`mt-1 ${selectClassName}`}
-                    >
-                      <option value="viewer">{labels.access.viewer}</option>
-                      <option value="editor">{labels.access.editor}</option>
-                    </select>
+                      onValueChange={(value) => setAccess(value as WorkspaceShareAccess)}
+                      className="mt-1"
+                      options={[
+                        { value: "viewer", label: labels.access.viewer },
+                        { value: "editor", label: labels.access.editor },
+                      ]}
+                    />
                   </div>
                   <Button
                     eventId="workspace_share_add"
@@ -250,24 +245,25 @@ export function WorkspaceShareDialog({
                           <label key={project.id} className="flex items-center gap-1 text-xs">
                             <span className="text-muted-foreground">{project.name}</span>
                             {canManage ? (
-                              <select
+                              <SelectField
                                 data-testid={`share-row-${project.id}`}
                                 aria-label={text.accessFor(row.email, project.name)}
                                 value={row.access[project.id] ?? ""}
                                 disabled={busy}
-                                onChange={(event) =>
+                                onValueChange={(value) =>
                                   void setRowAccess(
                                     row,
                                     project.id,
-                                    event.target.value as WorkspaceShareAccess | ""
+                                    value as WorkspaceShareAccess | ""
                                   )
                                 }
-                                className="h-8 rounded-md border border-border bg-card px-2 text-xs"
-                              >
-                                <option value="">{text.noAccess}</option>
-                                <option value="viewer">{labels.access.viewer}</option>
-                                <option value="editor">{labels.access.editor}</option>
-                              </select>
+                                className="h-8 w-auto px-2 text-xs"
+                                options={[
+                                  { value: "", label: text.noAccess },
+                                  { value: "viewer", label: labels.access.viewer },
+                                  { value: "editor", label: labels.access.editor },
+                                ]}
+                              />
                             ) : (
                               <span
                                 aria-label={text.accessFor(row.email, project.name)}

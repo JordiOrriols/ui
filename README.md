@@ -85,6 +85,21 @@ export default {
 
 ## Components
 
+### Select fields and display names
+
+Use `SelectField` instead of native `<select>` controls. It renders a shared,
+keyboard-accessible Radix listbox, including inside dialogs, with consistent
+focus, disabled and selected styles. Pass `options: { value, label, disabled? }[]`,
+`value`/`onValueChange` (or `defaultValue`), and the usual `id`, `aria-label`,
+`name`, `required`, `disabled` attributes. Empty-string options support “All” or
+“None”; a disabled empty option acts as a placeholder. Named fields submit their
+original values through `FormData`, including the empty string.
+
+Use `getDisplayName({ memberName, accountName, email })` for person labels.
+It trims and prefers the workspace member name, then account name, then the
+email's local part. Keep full emails for access-management forms where the
+address itself is needed; do not infer identity or permissions from a label.
+
 ### Workspace people and public-link sharing
 
 `WorkspaceBar` accepts an optional stable `sharing: WorkspaceSharingConfig`.

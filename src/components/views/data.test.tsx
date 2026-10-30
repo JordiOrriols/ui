@@ -241,14 +241,13 @@ describe("schema-independent copied views", () => {
     }
     render(<Example />);
     await userEvent.type(screen.getByLabelText("Email"), "NEW@EXAMPLE.COM");
-    await userEvent.selectOptions(screen.getByLabelText("Permission"), "writer");
+    await userEvent.click(screen.getByLabelText("Permission"));
+    await userEvent.click(screen.getByRole("option", { name: "Write", exact: true }));
     await userEvent.click(screen.getByRole("button", { name: "Invite" }));
     expect(share).toHaveBeenCalledWith("new@example.com", "writer");
     expect(screen.getByLabelText("Email")).toHaveValue("");
-    await userEvent.selectOptions(
-      screen.getByLabelText("Permission for ada@example.com"),
-      "writer"
-    );
+    await userEvent.click(screen.getByLabelText("Permission for ada@example.com"));
+    await userEvent.click(screen.getByRole("option", { name: "Write", exact: true }));
     expect(change).toHaveBeenCalledWith("ada", "writer");
     await userEvent.click(screen.getByRole("button", { name: "Remove ada@example.com" }));
     expect(remove).toHaveBeenCalledWith("ada");

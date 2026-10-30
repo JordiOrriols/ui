@@ -2,6 +2,7 @@
 export { Button, buttonVariants, type ButtonProps } from "./ui/button";
 export { Input } from "./ui/input";
 export { Label } from "./ui/label";
+export { SelectField, type SelectFieldProps, type SelectOption } from "./ui/select-field";
 export * from "./ui/alert-dialog";
 export * from "./ui/tabs";
 export * from "./views/LoginDialog";
