@@ -3,6 +3,9 @@
   "version": "0.3.16",
   "description": "Shared UI components and design tokens",
   "type": "module",
+  "engines": {
+    "node": ">=26.0.0"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
