@@ -3,6 +3,7 @@ import { DropdownMenu } from "radix-ui";
 import { Check } from "lucide-react";
 import { PROJECTS, getProject, type ProjectId } from "../../lib/projects";
 import { ProjectIcon } from "./ProjectIcon";
+import { IconTooltip } from "../ui/icon-tooltip";
 
 export function ProjectSwitcher({
   projectId,
@@ -15,13 +16,15 @@ export function ProjectSwitcher({
   const project = getProject(projectId);
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger
-        aria-label={label}
-        className="relative flex size-10 shrink-0 items-center justify-center rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [&>svg]:size-5"
-        style={{ backgroundColor: project.backgroundColor }}
-      >
-        <ProjectIcon projectId={projectId} aria-hidden="true" />
-      </DropdownMenu.Trigger>
+      <IconTooltip label={label}>
+        <DropdownMenu.Trigger
+          aria-label={label}
+          className="relative flex size-10 shrink-0 items-center justify-center rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [&>svg]:size-5"
+          style={{ backgroundColor: project.backgroundColor }}
+        >
+          <ProjectIcon projectId={projectId} aria-hidden="true" />
+        </DropdownMenu.Trigger>
+      </IconTooltip>
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           align="start"

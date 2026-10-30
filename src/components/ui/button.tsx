@@ -4,6 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 import { trackButtonClick, type AnalyticsEventData } from "@/utils/analytics";
+import { IconTooltip } from "./icon-tooltip";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
@@ -46,19 +47,35 @@ export type ButtonProps = React.ComponentProps<"button"> &
     eventId?: string;
     /** Extra data attached to the analytics event. */
     eventData?: AnalyticsEventData;
+    /** Override the shared tooltip, otherwise aria-label supplies its text. */
+    tooltip?: string;
   };
 
-function Button({
-  className,
-  variant = "default",
-  size = "default",
-  asChild = false,
-  eventId,
-  eventData,
-  onClick,
-  ...props
-}: ButtonProps) {
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  {
+    className,
+    variant = "default",
+    size = "default",
+    asChild = false,
+    eventId,
+    eventData,
+    onClick,
+    tooltip,
+    ...props
+  },
+  ref
+) {
   const Comp = asChild ? Slot : "button";
+  const accessibleLabel = props["aria-label"];
+  const label =
+    tooltip ??
+    (accessibleLabel
+      ? props.title && props.title !== accessibleLabel
+        ? `${accessibleLabel}: ${props.title}`
+        : accessibleLabel
+      : size?.startsWith("icon")
+        ? props.title
+        : undefined);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (eventId) {
@@ -67,16 +84,23 @@ function Button({
     onClick?.(e);
   };
 
-  return (
+  const control = (
     <Comp
+      ref={ref}
       data-slot="button"
       data-variant={variant}
       data-size={size}
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(
+        buttonVariants({ variant, size, className }),
+        label && !asChild && "disabled:pointer-events-auto"
+      )}
       onClick={handleClick}
       {...props}
+      title={label ? undefined : props.title}
+      aria-label={props["aria-label"] ?? (size?.startsWith("icon") ? label : undefined)}
     />
   );
-}
+  return label ? <IconTooltip label={label}>{control}</IconTooltip> : control;
+});
 
 export { Button, buttonVariants };

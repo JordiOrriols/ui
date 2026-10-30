@@ -4,6 +4,7 @@ import { buttonVariants } from "../ui/button";
 import { cn } from "../../lib/utils";
 import { trackButtonClick } from "../../utils/analytics";
 import { APP_LANGUAGES, type LanguageOption } from "../../lib/languages";
+import { IconTooltip } from "../ui/icon-tooltip";
 
 export type { LanguageOption };
 
@@ -25,16 +26,18 @@ export function LanguageSelector({
     languages.find((language) => language.code === current)?.short ?? languages[0]?.short;
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger
-        aria-label={label}
-        data-testid="language-selector"
-        className={cn(buttonVariants({ variant: "outline", size: "sm" }), className)}
-        onClick={() => trackButtonClick("header_language_menu")}
-      >
-        <Globe className="h-4 w-4" />
-        {short}
-        <ChevronDown className="h-3.5 w-3.5" />
-      </DropdownMenu.Trigger>
+      <IconTooltip label={label}>
+        <DropdownMenu.Trigger
+          aria-label={label}
+          data-testid="language-selector"
+          className={cn(buttonVariants({ variant: "outline", size: "sm" }), className)}
+          onClick={() => trackButtonClick("header_language_menu")}
+        >
+          <Globe className="h-4 w-4" />
+          {short}
+          <ChevronDown className="h-3.5 w-3.5" />
+        </DropdownMenu.Trigger>
+      </IconTooltip>
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           align="end"

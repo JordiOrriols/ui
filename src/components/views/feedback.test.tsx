@@ -40,4 +40,30 @@ describe("Shared feedback and footer", () => {
     rerender(<AppFooter text="Fet amb amor per Jordi Orriols" />);
     expect(screen.getByRole("contentinfo")).toHaveTextContent("Fet amb amor per Jordi Orriols");
   });
+  it.each(["ladders", "planner", "pulse", "shiplog"] as const)(
+    "links the %s footer icon to its repository with a shared tooltip",
+    async (projectId) => {
+      render(<AppFooter projectId={projectId} />);
+      const link = screen.getByRole("link", { name: "Contribute on GitHub" });
+      expect(link).toHaveAttribute("href", `https://github.com/JordiOrriols/${projectId}`);
+      expect(link).toHaveAttribute("rel", "noopener noreferrer");
+      expect(link).toHaveTextContent("");
+      await userEvent.hover(link);
+      expect(await screen.findByRole("tooltip")).toHaveTextContent("Contribute on GitHub");
+    }
+  );
+  it.each([
+    ["ca", "Contribueix a GitHub"],
+    ["es", "Contribuir en GitHub"],
+    ["fr-FR", "Contribuer sur GitHub"],
+    ["de", "Auf GitHub beitragen"],
+    ["it", "Contribuisci su GitHub"],
+    ["unknown", "Contribute on GitHub"],
+  ])("localizes the footer contribution action for %s", (language, label) => {
+    render(<AppFooter projectId="planner" language={language} />);
+    expect(screen.getByRole("link", { name: label })).toHaveAttribute(
+      "href",
+      "https://github.com/JordiOrriols/planner"
+    );
+  });
 });

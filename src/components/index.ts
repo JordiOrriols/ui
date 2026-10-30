@@ -1,5 +1,6 @@
 // Components
 export { Button, buttonVariants, type ButtonProps } from "./ui/button";
+export { IconTooltip } from "./ui/icon-tooltip";
 export { Input } from "./ui/input";
 export { Label } from "./ui/label";
 export { SelectField, type SelectFieldProps, type SelectOption } from "./ui/select-field";
