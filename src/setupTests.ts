@@ -3,6 +3,14 @@ import "@testing-library/jest-dom";
 import { afterEach } from "vitest";
 import { cleanup } from "@testing-library/react";
 
+if (typeof ResizeObserver === "undefined") {
+  globalThis.ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
+}
+
 // jsdom does not implement the pointer/scroll APIs used by Radix Select.
 if (typeof Element !== "undefined") {
   if (!Element.prototype.hasPointerCapture) Element.prototype.hasPointerCapture = () => false;

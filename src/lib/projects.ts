@@ -3,6 +3,7 @@ import { TrendingUp, GanttChartSquare, HeartPulse, Rocket } from "lucide-react";
 export const PROJECTS = [
   {
     id: "ladders",
+    repositoryUrl: "https://github.com/JordiOrriols/ladders",
     name: "Ladders",
     url: "https://ladders.jordiorriols.cat/",
     icon: TrendingUp,
@@ -11,6 +12,7 @@ export const PROJECTS = [
   },
   {
     id: "planner",
+    repositoryUrl: "https://github.com/JordiOrriols/planner",
     name: "Planner",
     url: "https://planner.jordiorriols.cat/",
     icon: GanttChartSquare,
@@ -19,6 +21,7 @@ export const PROJECTS = [
   },
   {
     id: "pulse",
+    repositoryUrl: "https://github.com/JordiOrriols/pulse",
     name: "Pulse",
     url: "https://pulse.jordiorriols.cat/",
     icon: HeartPulse,
@@ -27,6 +30,7 @@ export const PROJECTS = [
   },
   {
     id: "shiplog",
+    repositoryUrl: "https://github.com/JordiOrriols/shiplog",
     name: "Shiplog",
     url: "https://shiplog.jordiorriols.cat/",
     icon: Rocket,

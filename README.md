@@ -85,6 +85,20 @@ export default {
 
 ## Components
 
+### Icon actions and contribution links
+
+`Button` automatically shows the shared tooltip on hover and keyboard focus when
+it has an `aria-label`. Icon-only actions must provide a translated `aria-label`;
+`tooltip` can override the hint. Icon sizes also use `title` as a fallback.
+Use `IconTooltip` around non-Button triggers such as Radix menu triggers. It
+adds no layout wrapper, supports Escape dismissal and renders above dialogs.
+
+`AppFooter` accepts `projectId` to show a GitHub contribution icon on the right,
+using the repository URL from the shared project registry. `language` localizes
+the icon's accessible label and tooltip in the six supported languages;
+`contributeLabel` can override it. Radar chart downloads are revealed
+on chart hover or keyboard focus; they stay visible on devices without hover.
+
 ### Select fields and display names
 
 Use `SelectField` instead of native `<select>` controls. It renders a shared,

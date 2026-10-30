@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 
 import { Button, buttonVariants } from "../button";
 import { configureAnalytics, type AnalyticsSink } from "@/utils/analytics";
+import { createRef } from "react";
 
 describe("Button", () => {
   let events: Array<{ eventId: string; eventData?: Record<string, unknown> }>;
@@ -80,6 +81,96 @@ describe("Button", () => {
   });
 
   describe("asChild", () => {
+    it("shares hover and focus tooltips without adding layout wrappers", async () => {
+      const ref = createRef<HTMLButtonElement>();
+      const user = userEvent.setup();
+      const { container } = render(
+        <Button ref={ref} size="icon" aria-label="Edit">
+          <svg />
+        </Button>
+      );
+      const button = screen.getByRole("button", { name: "Edit" });
+      expect(ref.current).toBe(button);
+      expect(container.firstElementChild).toBe(button);
+      await user.hover(button);
+      expect(await screen.findByRole("tooltip")).toHaveTextContent("Edit");
+      await user.keyboard("{Escape}");
+      expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+      await user.unhover(button);
+      await user.tab();
+      expect(await screen.findByRole("tooltip")).toHaveTextContent("Edit");
+    });
+
+    it("keeps link semantics and tooltips when slotted into anchors", async () => {
+      render(
+        <Button asChild size="icon" aria-label="Contribute">
+          <a href="#repository">
+            <svg />
+          </a>
+        </Button>
+      );
+      const link = screen.getByRole("link", { name: "Contribute" });
+      await userEvent.hover(link);
+      expect(await screen.findByRole("tooltip")).toHaveTextContent("Contribute");
+      expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    });
+
+    it("upgrades icon titles to accessible shared tooltips without native duplicates", async () => {
+      render(
+        <Button size="icon" title="Download">
+          <svg />
+        </Button>
+      );
+      const button = screen.getByRole("button", { name: "Download" });
+      expect(button).not.toHaveAttribute("title");
+      await userEvent.hover(button);
+      expect(await screen.findByRole("tooltip")).toHaveTextContent("Download");
+    });
+
+    it("keeps a disabled icon's explanation available without enabling its action", async () => {
+      const onClick = vi.fn();
+      render(
+        <Button
+          disabled
+          size="icon"
+          aria-label="Delete"
+          title="Remove its features first"
+          onClick={onClick}
+        >
+          <svg />
+        </Button>
+      );
+      const button = screen.getByRole("button", { name: "Delete" });
+      await userEvent.hover(button);
+      expect(await screen.findByRole("tooltip")).toHaveTextContent(
+        "Delete: Remove its features first"
+      );
+      await userEvent.click(button);
+      expect(onClick).not.toHaveBeenCalled();
+      expect(button).toBeDisabled();
+    });
+
+    it("preserves accessible names and fires an icon action exactly once", async () => {
+      const onClick = vi.fn();
+      render(
+        <Button
+          size="icon"
+          aria-label="Approve"
+          tooltip="Approve release"
+          eventId="approve"
+          onClick={onClick}
+        >
+          <svg />
+        </Button>
+      );
+      const button = screen.getByRole("button", { name: "Approve" });
+      await userEvent.hover(button);
+      expect(await screen.findByRole("tooltip")).toHaveTextContent("Approve release");
+      await userEvent.click(button);
+      expect(onClick).toHaveBeenCalledOnce();
+      expect(events).toHaveLength(1);
+    });
+
     it("renders the child element instead of a button", () => {
       render(
         <Button asChild>

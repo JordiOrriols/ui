@@ -68,7 +68,7 @@ function RadarChartView({
     );
   });
   return (
-    <div className={`flex flex-col items-center relative ${className}`}>
+    <div className={`group/radar flex flex-col items-center relative ${className}`}>
       {onDownload && (
         <Button
           eventId="radar_chart_download"
@@ -77,9 +77,8 @@ function RadarChartView({
           }}
           variant="ghost"
           size="icon"
-          className="absolute top-0 right-0 z-10"
-          title={downloadLabel}
-          aria-label={downloadLabel}
+          className="absolute top-0 right-0 z-10 [@media(hover:hover)]:opacity-0 group-hover/radar:opacity-100 group-focus-within/radar:opacity-100"
+          aria-label={downloadLabel ?? "Download chart"}
         >
           <Download className="h-4 w-4" />
         </Button>
