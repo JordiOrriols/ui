@@ -60,7 +60,7 @@ export function WorkspacePublicLink({
   const url = token ? config.getUrl(token) : "";
 
   return (
-    <section aria-label={text.title} className="space-y-3 border-t border-border pt-5">
+    <section aria-label={text.title} className="space-y-3">
       <h3 className="flex items-center gap-2 text-sm font-semibold">
         <Globe className="size-4" aria-hidden="true" />
         {text.title}

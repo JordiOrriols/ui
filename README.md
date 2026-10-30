@@ -88,12 +88,15 @@ export default {
 ### Workspace people and public-link sharing
 
 `WorkspaceBar` accepts an optional stable `sharing: WorkspaceSharingConfig`.
-It places **People with access** first, then **Public link**, in the existing
-Share dialog; do not add a separate public-link modal or page in consumers.
+It places people access in an **Emails** tab (selected when opening) and public
+sharing in a **Link** tab in the existing Share dialog; do not add a separate
+public-link modal or page in consumers. Tabs reuse the shared Radix-based
+components with keyboard navigation. Apps without public-link configuration
+retain their existing people-only dialog, without an empty Link tab.
 The host provides `readAccess()` and a `publicLink` configuration with `load()`,
 `setEnabled(enabled)`, `getUrl(token)` and an app-specific `description`.
 Memoize these callbacks/configuration per workspace and signed-in account.
-Links load only while the Share dialog is open, with copy/open, explicit errors,
+Links load only when the Link tab is opened, with copy/open, explicit errors,
 retry and owner-only enable/revoke controls. Shared copy is localized in all six
 application languages through `getWorkspaceLabels`.
 

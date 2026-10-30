@@ -6,6 +6,8 @@ export interface WorkspaceLabels {
   create: { title: string; description: string; name: string; cancel: string; submit: string };
   shareDialog: {
     people: string;
+    emailsTab: string;
+    linkTab: string;
     readOnlyDescription: string;
     publicLink: {
       title: string;
@@ -50,6 +52,8 @@ const en: WorkspaceLabels = {
   },
   shareDialog: {
     people: "People with access",
+    emailsTab: "Emails",
+    linkTab: "Link",
     readOnlyDescription: "View who can access this workspace. Only the owner can change sharing.",
     publicLink: {
       title: "Public link",
@@ -95,6 +99,8 @@ const es: WorkspaceLabels = {
   },
   shareDialog: {
     people: "Personas con acceso",
+    emailsTab: "Correos",
+    linkTab: "Enlace",
     readOnlyDescription:
       "Consulta quién tiene acceso. Solo el propietario puede cambiar los permisos.",
     publicLink: {
@@ -142,6 +148,8 @@ const ca: WorkspaceLabels = {
   },
   shareDialog: {
     people: "Persones amb accés",
+    emailsTab: "Correus",
+    linkTab: "Enllaç",
     readOnlyDescription: "Consulta qui hi té accés. Només el propietari pot canviar els permisos.",
     publicLink: {
       title: "Enllaç públic",
@@ -189,6 +197,8 @@ const fr: WorkspaceLabels = {
   },
   shareDialog: {
     people: "Personnes ayant accès",
+    emailsTab: "E-mails",
+    linkTab: "Lien",
     readOnlyDescription: "Consultez les accès. Seul le propriétaire peut modifier le partage.",
     publicLink: {
       title: "Lien public",
@@ -235,6 +245,8 @@ const de: WorkspaceLabels = {
   },
   shareDialog: {
     people: "Personen mit Zugriff",
+    emailsTab: "E-Mails",
+    linkTab: "Link",
     readOnlyDescription: "Sehen Sie, wer Zugriff hat. Nur der Eigentümer kann die Freigabe ändern.",
     publicLink: {
       title: "Öffentlicher Link",
@@ -281,6 +293,8 @@ const it: WorkspaceLabels = {
   },
   shareDialog: {
     people: "Persone con accesso",
+    emailsTab: "E-mail",
+    linkTab: "Link",
     readOnlyDescription:
       "Visualizza chi ha accesso. Solo il proprietario può modificare la condivisione.",
     publicLink: {
