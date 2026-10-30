@@ -247,9 +247,18 @@ The package includes CSS custom properties for:
 
 ## Development
 
+Use Node.js 26 LTS (npm included). The `.nvmrc` file selects Node 26 for local
+development and all CI/publishing jobs; the package requires Node.js 26 or newer.
+Vitest disables Node's native Web Storage in test workers so browser tests use
+jsdom's `localStorage` and `sessionStorage`.
+
 ```bash
+# Select the project runtime (with nvm installed)
+nvm install
+nvm use
+
 # Install dependencies
-npm install
+npm ci
 
 # Build
 npm run build
