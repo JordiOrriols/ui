@@ -123,32 +123,31 @@ describe("WorkspaceBar", () => {
     await userEvent.click(screen.getByRole("button", { name: "Share" }));
     const dialog = await screen.findByTestId("share-workspace-dialog");
     const row = await within(dialog).findByTestId("share-row");
-    expect(within(row).getByLabelText("Ladders access for ana@x.com")).toHaveValue("editor");
-    expect(within(row).getByLabelText("Planner access for ana@x.com")).toHaveValue("viewer");
-    expect(within(row).getByLabelText("Pulse access for ana@x.com")).toHaveValue("");
-    expect(within(dialog).getByLabelText("App")).toHaveValue("ladders");
+    expect(within(row).getByLabelText("Ladders access for ana@x.com")).toHaveTextContent("Editor");
+    expect(within(row).getByLabelText("Planner access for ana@x.com")).toHaveTextContent("Viewer");
+    expect(within(row).getByLabelText("Pulse access for ana@x.com")).toHaveTextContent("No access");
+    expect(within(dialog).getByLabelText("App")).toHaveTextContent("Ladders");
 
-    await userEvent.selectOptions(
-      within(row).getByLabelText("Pulse access for ana@x.com"),
-      "viewer"
-    );
+    await userEvent.click(within(row).getByLabelText("Pulse access for ana@x.com"));
+    await userEvent.click(screen.getByRole("option", { name: "Viewer", exact: true }));
     await waitFor(() =>
       expect(api.share).toHaveBeenCalledWith("w1", "ana@x.com", "pulse", "viewer")
     );
-    await userEvent.selectOptions(
-      within(row).getByLabelText("Planner access for ana@x.com"),
-      "editor"
-    );
+    await userEvent.click(within(row).getByLabelText("Planner access for ana@x.com"));
+    await userEvent.click(screen.getByRole("option", { name: "Editor", exact: true }));
     await waitFor(() =>
       expect(api.updateShare).toHaveBeenCalledWith("w1", "u1", "planner", "editor")
     );
-    await userEvent.selectOptions(within(row).getByLabelText("Ladders access for ana@x.com"), "");
+    await userEvent.click(within(row).getByLabelText("Ladders access for ana@x.com"));
+    await userEvent.click(screen.getByRole("option", { name: "No access", exact: true }));
     await waitFor(() => expect(api.removeShare).toHaveBeenCalledWith("w1", "u1", "ladders"));
     expect(props.onSharesChanged).toHaveBeenCalledTimes(3);
 
     await userEvent.type(within(dialog).getByLabelText("Email"), "Bo@X.com");
-    await userEvent.selectOptions(within(dialog).getByLabelText("App"), "all");
-    await userEvent.selectOptions(within(dialog).getByLabelText("Permission"), "editor");
+    await userEvent.click(within(dialog).getByLabelText("App"));
+    await userEvent.click(screen.getByRole("option", { name: "All apps", exact: true }));
+    await userEvent.click(within(dialog).getByLabelText("Permission"));
+    await userEvent.click(screen.getByRole("option", { name: "Editor", exact: true }));
     await userEvent.click(within(dialog).getByRole("button", { name: "Share" }));
     await waitFor(() => expect(within(dialog).getAllByTestId("share-row")).toHaveLength(2));
     for (const app of ["ladders", "planner", "pulse"])

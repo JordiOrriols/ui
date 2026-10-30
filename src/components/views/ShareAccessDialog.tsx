@@ -3,6 +3,7 @@ import type { useShareAccessForm } from "../../hooks/useShareAccessForm";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { SelectField } from "../ui/select-field";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -78,22 +79,17 @@ export function ShareAccessDialog<T extends string>({
           </div>
           <div>
             <Label htmlFor="share-access">{labels.permission}</Label>
-            <select
+            <SelectField
               id="share-access"
               data-testid="share-access-select"
               value={form.access}
-              onChange={(event) => {
-                const option = options.find((item) => item.value === event.target.value);
+              onValueChange={(value) => {
+                const option = options.find((item) => item.value === value);
                 if (option) form.setAccess(option.value);
               }}
-              className="mt-1 h-9 w-full rounded-md border border-slate-200 bg-white px-3 text-sm"
-            >
-              {options.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              className="mt-1"
+              options={options}
+            />
           </div>
           <Button
             eventId="team_share_add"
@@ -125,23 +121,18 @@ export function ShareAccessDialog<T extends string>({
                 <span className="min-w-0 flex-1 truncate text-sm text-slate-700">
                   {entry.email}
                 </span>
-                <select
+                <SelectField
                   data-testid="share-row-access"
                   aria-label={labels.permissionFor(entry.email)}
                   value={entry.access}
                   disabled={form.busy}
-                  onChange={(event) => {
-                    const option = options.find((item) => item.value === event.target.value);
+                  onValueChange={(value) => {
+                    const option = options.find((item) => item.value === value);
                     if (option) void form.changeAccess(entry.id, option.value);
                   }}
-                  className="h-8 rounded-md border border-slate-200 bg-white px-2 text-xs"
-                >
-                  {options.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+                  className="h-8 w-auto px-2 text-xs"
+                  options={options}
+                />
                 <Button
                   eventId="team_share_remove"
                   data-testid="share-row-remove"
