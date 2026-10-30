@@ -85,6 +85,40 @@ export default {
 
 ## Components
 
+### Workspace people and public-link sharing
+
+`WorkspaceBar` accepts an optional stable `sharing: WorkspaceSharingConfig`.
+It places **People with access** first, then **Public link**, in the existing
+Share dialog; do not add a separate public-link modal or page in consumers.
+The host provides `readAccess()` and a `publicLink` configuration with `load()`,
+`setEnabled(enabled)`, `getUrl(token)` and an app-specific `description`.
+Memoize these callbacks/configuration per workspace and signed-in account.
+Links load only while the Share dialog is open, with copy/open, explicit errors,
+retry and owner-only enable/revoke controls. Shared copy is localized in all six
+application languages through `getWorkspaceLabels`.
+
+Owners retain existing per-app collaborator management. When `sharing` is
+provided, editors and viewers can open Share to inspect current-app access and
+copy/open an existing public link, but cannot add people, edit permissions or
+enable/revoke public access. Restricted `member` accounts do not gain access.
+Without `sharing`, existing owner-only behavior is unchanged.
+
+**Consumer/backend integration required:** `readAccess()` must call an authorized
+current-app directory endpoint, not the existing owner-only `list_workspace_shares`
+RPC. Public-link reads must permit current-app editors/viewers and enable/revoke
+must enforce ownership server-side. UI controls are not authorization. Do not
+grant anonymous access to the collaborator directory. Planner/Shiplog integrations
+and their database permission changes follow publication of this UI release.
+
+### Modal dimensions
+
+`Modal` and the alert-dialog primitive default to 712px at desktop breakpoints
+(200px wider than before), with a 32px viewport margin on narrow screens.
+Team sharing is 872px and workspace sharing is 968px. `ReferenceDialog` is
+also 968px. All are content-sized with no forced minimum height and a maximum
+height of `70dvh`; overflowing content scrolls. `Modal` and workspace-sharing
+footers stay outside the scrolling content, preserving action visibility.
+
 ### Shared project navigation, authentication and loading
 
 `PROJECTS` in `src/lib/projects.ts` is the single registry for project IDs,

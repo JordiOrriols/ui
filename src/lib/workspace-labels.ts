@@ -5,6 +5,21 @@ export interface WorkspaceLabels {
   access: { owner: string; editor: string; viewer: string; member: string };
   create: { title: string; description: string; name: string; cancel: string; submit: string };
   shareDialog: {
+    people: string;
+    readOnlyDescription: string;
+    publicLink: {
+      title: string;
+      link: string;
+      copy: string;
+      copied: string;
+      open: string;
+      enable: string;
+      revoke: string;
+      revokeDescription: string;
+      disabled: string;
+      unavailable: string;
+      retry: string;
+    };
     title: (workspace: string) => string;
     description: string;
     email: string;
@@ -34,6 +49,21 @@ const en: WorkspaceLabels = {
     submit: "Create",
   },
   shareDialog: {
+    people: "People with access",
+    readOnlyDescription: "View who can access this workspace. Only the owner can change sharing.",
+    publicLink: {
+      title: "Public link",
+      link: "Public link",
+      copy: "Copy link",
+      copied: "Link copied",
+      open: "Open link",
+      enable: "Enable public link",
+      revoke: "Revoke public link",
+      revokeDescription: "Disable this public link? Anyone with the old link will lose access.",
+      disabled: "Public access is disabled. Only the workspace owner can enable it.",
+      unavailable: "The public link is unavailable.",
+      retry: "Retry",
+    },
     title: (workspace) => `Share ${workspace}`,
     description:
       "Choose which apps each person can open in this workspace and whether they can edit.",
@@ -64,6 +94,23 @@ const es: WorkspaceLabels = {
     submit: "Crear",
   },
   shareDialog: {
+    people: "Personas con acceso",
+    readOnlyDescription:
+      "Consulta quién tiene acceso. Solo el propietario puede cambiar los permisos.",
+    publicLink: {
+      title: "Enlace público",
+      link: "Enlace público",
+      copy: "Copiar enlace",
+      copied: "Enlace copiado",
+      open: "Abrir enlace",
+      enable: "Activar enlace público",
+      revoke: "Revocar enlace público",
+      revokeDescription:
+        "¿Desactivar este enlace público? Quien tenga el enlace anterior perderá el acceso.",
+      disabled: "El acceso público está desactivado. Solo el propietario puede activarlo.",
+      unavailable: "El enlace público no está disponible.",
+      retry: "Reintentar",
+    },
     title: (workspace) => `Compartir ${workspace}`,
     description:
       "Elige qué aplicaciones puede abrir cada persona en este espacio de trabajo y si puede editar.",
@@ -94,6 +141,22 @@ const ca: WorkspaceLabels = {
     submit: "Crear",
   },
   shareDialog: {
+    people: "Persones amb accés",
+    readOnlyDescription: "Consulta qui hi té accés. Només el propietari pot canviar els permisos.",
+    publicLink: {
+      title: "Enllaç públic",
+      link: "Enllaç públic",
+      copy: "Copiar enllaç",
+      copied: "Enllaç copiat",
+      open: "Obrir enllaç",
+      enable: "Activar enllaç públic",
+      revoke: "Revocar enllaç públic",
+      revokeDescription:
+        "Vols desactivar aquest enllaç públic? Qui tingui l'enllaç anterior perdrà l'accés.",
+      disabled: "L'accés públic està desactivat. Només el propietari el pot activar.",
+      unavailable: "L'enllaç públic no està disponible.",
+      retry: "Tornar-ho a provar",
+    },
     title: (workspace) => `Compartir ${workspace}`,
     description:
       "Tria quines aplicacions pot obrir cada persona en aquest espai de treball i si pot editar.",
@@ -125,6 +188,22 @@ const fr: WorkspaceLabels = {
     submit: "Créer",
   },
   shareDialog: {
+    people: "Personnes ayant accès",
+    readOnlyDescription: "Consultez les accès. Seul le propriétaire peut modifier le partage.",
+    publicLink: {
+      title: "Lien public",
+      link: "Lien public",
+      copy: "Copier le lien",
+      copied: "Lien copié",
+      open: "Ouvrir le lien",
+      enable: "Activer le lien public",
+      revoke: "Révoquer le lien public",
+      revokeDescription:
+        "Désactiver ce lien public ? Les personnes ayant l'ancien lien perdront l'accès.",
+      disabled: "L'accès public est désactivé. Seul le propriétaire peut l'activer.",
+      unavailable: "Le lien public est indisponible.",
+      retry: "Réessayer",
+    },
     title: (workspace) => `Partager ${workspace}`,
     description:
       "Choisissez les applications que chaque personne peut ouvrir dans cet espace de travail et si elle peut modifier.",
@@ -155,6 +234,22 @@ const de: WorkspaceLabels = {
     submit: "Erstellen",
   },
   shareDialog: {
+    people: "Personen mit Zugriff",
+    readOnlyDescription: "Sehen Sie, wer Zugriff hat. Nur der Eigentümer kann die Freigabe ändern.",
+    publicLink: {
+      title: "Öffentlicher Link",
+      link: "Öffentlicher Link",
+      copy: "Link kopieren",
+      copied: "Link kopiert",
+      open: "Link öffnen",
+      enable: "Öffentlichen Link aktivieren",
+      revoke: "Öffentlichen Link widerrufen",
+      revokeDescription:
+        "Diesen öffentlichen Link deaktivieren? Personen mit dem alten Link verlieren den Zugriff.",
+      disabled: "Der öffentliche Zugriff ist deaktiviert. Nur der Eigentümer kann ihn aktivieren.",
+      unavailable: "Der öffentliche Link ist nicht verfügbar.",
+      retry: "Erneut versuchen",
+    },
     title: (workspace) => `${workspace} teilen`,
     description:
       "Wählen Sie, welche Apps jede Person in diesem Arbeitsbereich öffnen kann und ob sie bearbeiten darf.",
@@ -185,6 +280,23 @@ const it: WorkspaceLabels = {
     submit: "Crea",
   },
   shareDialog: {
+    people: "Persone con accesso",
+    readOnlyDescription:
+      "Visualizza chi ha accesso. Solo il proprietario può modificare la condivisione.",
+    publicLink: {
+      title: "Link pubblico",
+      link: "Link pubblico",
+      copy: "Copia link",
+      copied: "Link copiato",
+      open: "Apri link",
+      enable: "Attiva link pubblico",
+      revoke: "Revoca link pubblico",
+      revokeDescription:
+        "Disattivare questo link pubblico? Chi ha il vecchio link perderà l'accesso.",
+      disabled: "L'accesso pubblico è disattivato. Solo il proprietario può attivarlo.",
+      unavailable: "Il link pubblico non è disponibile.",
+      retry: "Riprova",
+    },
     title: (workspace) => `Condividi ${workspace}`,
     description:
       "Scegli quali app ogni persona può aprire in questo spazio di lavoro e se può modificare.",

@@ -8,6 +8,7 @@ import type { WorkspaceLabels } from "../../lib/workspace-labels";
 import { Button, buttonVariants } from "../ui/button";
 import { NameDialog } from "./NameDialog";
 import { WorkspaceShareDialog } from "./WorkspaceShareDialog";
+import type { WorkspaceSharingConfig } from "./WorkspaceShareDialog";
 
 const itemClassName =
   "flex items-center gap-2 rounded px-3 py-2 text-sm outline-none data-[highlighted]:bg-muted";
@@ -25,6 +26,7 @@ export function WorkspaceBar({
   onCreated,
   onSharesChanged,
   labels,
+  sharing,
 }: {
   api: WorkspaceApi;
   app: ProjectId;
@@ -34,10 +36,14 @@ export function WorkspaceBar({
   onCreated: (workspace: WorkspaceSummary) => void | Promise<void>;
   onSharesChanged?: () => void | Promise<void>;
   labels: WorkspaceLabels;
+  sharing?: WorkspaceSharingConfig;
 }) {
   const [creating, setCreating] = useState(false);
-  const [sharing, setSharing] = useState(false);
+  const [sharingOpen, setSharing] = useState(false);
   const current = workspaces.find((workspace) => workspace.id === value);
+  const canShare =
+    current?.access_level === "owner" ||
+    Boolean(sharing && (current?.access_level === "editor" || current?.access_level === "viewer"));
   const nameForm = useNameForm({
     isOpen: creating,
     onSubmit: async (name) => {
@@ -93,7 +99,7 @@ export function WorkspaceBar({
           </DropdownMenu.Content>
         </DropdownMenu.Portal>
       </DropdownMenu.Root>
-      {current?.access_level === "owner" && (
+      {canShare && (
         <Button
           eventId="workspace_share_open"
           data-testid="workspace-share"
@@ -114,13 +120,16 @@ export function WorkspaceBar({
       />
       {current && (
         <WorkspaceShareDialog
-          isOpen={sharing}
+          key={current.id}
+          isOpen={sharingOpen && canShare}
           onClose={() => setSharing(false)}
           api={api}
           workspace={current}
           app={app}
           labels={labels}
           onChanged={onSharesChanged}
+          canManage={current.access_level === "owner"}
+          sharing={sharing}
         />
       )}
     </div>

@@ -29,14 +29,14 @@ export function ReferenceDialog({
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl mx-4"
+        className="bg-white flex max-h-[70dvh] flex-col rounded-2xl shadow-2xl w-full max-w-[968px] mx-4"
         data-testid="reference-modal"
         role="dialog"
         aria-modal="true"
         aria-label={title}
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-6 border-b border-slate-200">
+        <div className="flex shrink-0 items-center justify-between p-6 border-b border-slate-200">
           <h2 className="text-xl font-semibold text-slate-800">{title}</h2>
           <Button
             eventId="reference_modal_close"
@@ -49,13 +49,10 @@ export function ReferenceDialog({
             <span className="text-xl">&times;</span>
           </Button>
         </div>
-        <div
-          className="p-6 max-h-[70vh] overflow-y-auto space-y-6"
-          data-testid="reference-modal-body"
-        >
+        <div className="min-h-0 p-6 overflow-y-auto space-y-6" data-testid="reference-modal-body">
           {children}
         </div>
-        <div className="p-6 border-t border-slate-200 bg-slate-50 rounded-b-2xl">
+        <div className="shrink-0 p-6 border-t border-slate-200 bg-slate-50 rounded-b-2xl">
           <Button eventId="reference_modal_close_footer" onClick={onClose} className="w-full">
             {closeLabel}
           </Button>
