@@ -39,6 +39,35 @@ function setup(access: WorkspaceAccessLevel = "owner", enabled = true) {
   return { api, sharing, listShares, ...view };
 }
 describe("unified workspace sharing", () => {
+  it("keeps people-only sharing unchanged when no public link is configured", async () => {
+    render(
+      <WorkspaceShareDialog
+        isOpen
+        onClose={vi.fn()}
+        api={createDemoWorkspaceApi(entries)}
+        workspace={{ id: "workspace", name: "Digital" }}
+        app="planner"
+        labels={labels}
+      />
+    );
+    expect(await screen.findByText("reader@example.com")).toBeVisible();
+    expect(screen.getByLabelText("Email")).toBeVisible();
+    expect(screen.queryByRole("tablist")).not.toBeInTheDocument();
+  });
+  it("supports keyboard tab selection without losing visible footer actions", async () => {
+    setup();
+    await userEvent.click(screen.getByTestId("workspace-share"));
+    screen.getByRole("tab", { name: "Emails", exact: true }).focus();
+    await userEvent.keyboard("{ArrowRight}");
+    expect(screen.getByRole("tab", { name: "Link", exact: true })).toHaveAttribute(
+      "aria-selected",
+      "true"
+    );
+    expect(await screen.findByRole("textbox", { name: "Public link" })).toBeVisible();
+    expect(screen.getByRole("button", { name: "Close", exact: true })).toBeVisible();
+    await userEvent.keyboard("{ArrowLeft}");
+    expect(screen.getByLabelText("Email")).toBeVisible();
+  });
   it("reports directory failures and retries without using owner-only access for a viewer", async () => {
     const { sharing, listShares } = setup("viewer");
     vi.mocked(sharing.readAccess).mockRejectedValueOnce(new Error("Cannot read access"));
@@ -52,23 +81,39 @@ describe("unified workspace sharing", () => {
     const { sharing } = setup("owner", false);
     vi.mocked(sharing.publicLink.setEnabled).mockResolvedValueOnce(null);
     await userEvent.click(screen.getByTestId("workspace-share"));
+    await userEvent.click(screen.getByRole("tab", { name: "Link", exact: true }));
     await userEvent.click(await screen.findByRole("button", { name: "Enable public link" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("The public link is unavailable.");
     expect(screen.queryByRole("textbox", { name: "Public link" })).not.toBeInTheDocument();
   });
-  it("loads people then public-link controls inside one dialog and keeps loading lazy", async () => {
+  it("defaults to Emails, loads links only in Link, and preserves an email draft across tabs", async () => {
     const { sharing } = setup();
     expect(sharing.publicLink.load).not.toHaveBeenCalled();
     await userEvent.click(screen.getByTestId("workspace-share"));
     const dialog = screen.getByTestId("share-workspace-dialog");
     const people = within(dialog).getByRole("region", { name: "People with access" });
+    expect(screen.getByRole("tab", { name: "Emails", exact: true })).toHaveAttribute(
+      "aria-selected",
+      "true"
+    );
+    expect(within(people).getByLabelText("Email")).toBeVisible();
+    await userEvent.type(within(people).getByLabelText("Email"), "draft@example.com");
+    expect(sharing.publicLink.load).not.toHaveBeenCalled();
+    expect(within(dialog).queryByRole("region", { name: "Public link" })).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("tab", { name: "Link", exact: true }));
     const link = within(dialog).getByRole("region", { name: "Public link" });
-    expect(people.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(await within(link).findByRole("textbox")).toHaveValue(
       "https://planner.example/#/roadmap/token"
     );
-    expect(within(people).getByLabelText("Email")).toBeVisible();
     expect(within(link).getByRole("button", { name: "Revoke public link" })).toBeVisible();
+    await userEvent.click(screen.getByRole("tab", { name: "Emails", exact: true }));
+    expect(screen.getByLabelText("Email")).toHaveValue("draft@example.com");
+    await userEvent.click(screen.getByRole("button", { name: "Close", exact: true }));
+    await userEvent.click(screen.getByTestId("workspace-share"));
+    expect(screen.getByRole("tab", { name: "Emails", exact: true })).toHaveAttribute(
+      "aria-selected",
+      "true"
+    );
   });
   it.each(["editor", "viewer"] as const)(
     "gives a %s read-only current-app access and link copying without mutations",
@@ -85,6 +130,7 @@ describe("unified workspace sharing", () => {
       expect(
         within(dialog).queryByRole("button", { name: /Remove|Enable|Revoke/ })
       ).not.toBeInTheDocument();
+      await user.click(screen.getByRole("tab", { name: "Link", exact: true }));
       await user.click(await within(dialog).findByRole("button", { name: "Copy link" }));
       expect(clipboard).toHaveBeenCalledWith("https://planner.example/#/roadmap/token");
       expect(await within(dialog).findByRole("status")).toHaveTextContent("Link copied");
@@ -96,6 +142,7 @@ describe("unified workspace sharing", () => {
   it("never enables a disabled public link for a viewer", async () => {
     const { sharing } = setup("viewer", false);
     await userEvent.click(screen.getByTestId("workspace-share"));
+    await userEvent.click(screen.getByRole("tab", { name: "Link", exact: true }));
     expect(await screen.findByText(/Public access is disabled/)).toBeVisible();
     expect(screen.queryByRole("button", { name: "Enable public link" })).not.toBeInTheDocument();
     expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
@@ -108,6 +155,7 @@ describe("unified workspace sharing", () => {
   it("hides an open share dialog when switching to a restricted workspace", async () => {
     const { api, sharing, rerender } = setup();
     await userEvent.click(screen.getByTestId("workspace-share"));
+    await userEvent.click(screen.getByRole("tab", { name: "Link", exact: true }));
     expect(await screen.findByRole("textbox", { name: "Public link" })).toBeVisible();
     vi.mocked(sharing.publicLink.load).mockClear();
     rerender(
@@ -132,6 +180,7 @@ describe("unified workspace sharing", () => {
   it("lets owners enable, cancel revocation and revoke the public link", async () => {
     const { sharing } = setup("owner", false);
     await userEvent.click(screen.getByTestId("workspace-share"));
+    await userEvent.click(screen.getByRole("tab", { name: "Link", exact: true }));
     await userEvent.click(await screen.findByRole("button", { name: "Enable public link" }));
     expect(await screen.findByRole("textbox", { name: "Public link" })).toHaveValue(
       "https://planner.example/#/roadmap/new-token"
@@ -154,6 +203,7 @@ describe("unified workspace sharing", () => {
     const { sharing } = setup();
     vi.mocked(sharing.publicLink.load).mockRejectedValueOnce(new Error("Cannot load link"));
     await userEvent.click(screen.getByTestId("workspace-share"));
+    await userEvent.click(screen.getByRole("tab", { name: "Link", exact: true }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Cannot load link");
     expect(screen.queryByText(/Public access is disabled/)).not.toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Retry" }));
@@ -164,6 +214,7 @@ describe("unified workspace sharing", () => {
     const { sharing } = setup();
     vi.spyOn(navigator.clipboard, "writeText").mockRejectedValue(new Error("Clipboard denied"));
     await user.click(screen.getByTestId("workspace-share"));
+    await user.click(screen.getByRole("tab", { name: "Link", exact: true }));
     await user.click(await screen.findByRole("button", { name: "Copy link" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Clipboard denied");
     expect(screen.queryByText("Link copied")).not.toBeInTheDocument();
@@ -208,6 +259,7 @@ describe("unified workspace sharing", () => {
         sharing={config}
       />
     );
+    await userEvent.click(screen.getByRole("tab", { name: "Link", exact: true }));
     await waitFor(() => expect(resolve).toBeDefined());
     const next = { ...config, publicLink: { ...config.publicLink, load: async () => "second" } };
     rerender(
@@ -217,6 +269,7 @@ describe("unified workspace sharing", () => {
         sharing={next}
       />
     );
+    await userEvent.click(screen.getByRole("tab", { name: "Link", exact: true }));
     expect(await screen.findByRole("textbox", { name: "Public link" })).toHaveValue(
       "https://example.com/second"
     );
