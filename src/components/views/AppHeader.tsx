@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { LogIn, LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import { ProjectSwitcher } from "./ProjectSwitcher";
-import type { ProjectId } from "../../lib/projects";
+import { getProject, type ProjectId } from "../../lib/projects";
 
 export function AppHeader({
   title,
@@ -79,7 +79,11 @@ export function AppHeader({
                 data-testid={accountAction.type === "signIn" ? "sign-in-button" : "sign-out-button"}
               >
                 {accountAction.type === "signIn" ? (
-                  <LogIn className="size-4" />
+                  <LogIn
+                    className="size-4"
+                    aria-hidden="true"
+                    style={projectId ? { color: getProject(projectId).color } : undefined}
+                  />
                 ) : (
                   <LogOut className="size-4" />
                 )}

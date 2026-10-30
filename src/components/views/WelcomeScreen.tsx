@@ -1,9 +1,12 @@
 import type { ReactNode } from "react";
 import { Button } from "../ui/button";
+import { ProjectIcon } from "./ProjectIcon";
+import type { ProjectId } from "../../lib/projects";
 
 export interface WelcomeScreenProps {
   brand: string;
   icon: ReactNode;
+  projectId?: ProjectId;
   title: string;
   description: string;
   features: { label: string; icon: ReactNode }[];
@@ -19,6 +22,7 @@ export interface WelcomeScreenProps {
 export function WelcomeScreen({
   brand,
   icon,
+  projectId,
   title,
   description,
   features,
@@ -37,7 +41,7 @@ export function WelcomeScreen({
     >
       <div className="w-full max-w-xl space-y-8 py-16">
         <div className="flex gap-3 items-center text-primary [&_svg]:size-8">
-          {icon}
+          {projectId ? <ProjectIcon projectId={projectId} aria-hidden="true" /> : icon}
           <span className="font-semibold text-xl">{brand}</span>
         </div>
         <h1 className="text-4xl font-semibold tracking-tight">{title}</h1>
