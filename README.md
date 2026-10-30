@@ -88,10 +88,25 @@ export default {
 ### Shared project navigation, authentication and loading
 
 `PROJECTS` in `src/lib/projects.ts` is the single registry for project IDs,
-names, icons and canonical URLs. Add a project there and release/update this
+names, icons, brand colors and canonical URLs. Add a project there and release/update this
 package in each consumer; no consumer-owned menu list is needed. Pass
 `projectId="planner"`, `projectId="ladders"` or `projectId="pulse"` to `AppHeader` to enable its icon
 dropdown. `getProjectUrl("planner")` also supplies cross-app vacation links.
+
+The shared palette is Ladders blue (`#3b82f6`), Planner green (`#10b981`),
+Pulse purple (`#a855f7`) and Shiplog orange (`#f59e0b`). Header switcher icons
+use their project color on a subtle tinted background; every menu icon uses its
+own project color. The header sign-in icon also uses the current project's color.
+These colors are explicit SVG styles, so consumers do not need additional
+Tailwind color classes and the icons remain colored in light and dark themes.
+
+Pass the same `projectId` to `WelcomeScreen` to use the registered colored mark
+on the login/welcome page instead of inheriting the neutral primary color.
+Existing `icon` rendering is preserved when `projectId` is omitted.
+For other brand locations, reuse `<ProjectIcon projectId="shiplog" />` rather
+than duplicating icon/color mappings. `getProject(id)` exposes the full registry
+entry for custom surfaces. This does not recolor GitHub's provider logo or
+unrelated navigation/action icons.
 
 Before creating a Supabase client, call `redirectAuthCallback(projectId)` and
 skip client creation if it returns true (navigation is in progress). Pass
@@ -291,4 +306,3 @@ git push origin v0.1.0
 ## License
 
 MIT
-

@@ -8,6 +8,7 @@ const meta = {
   component: WelcomeScreen,
   args: {
     brand: "Cadence / Planner",
+    projectId: "planner",
     icon: <GanttChartSquare />,
     title: "Make room for the work ahead.",
     description:

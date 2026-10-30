@@ -5,7 +5,8 @@ export * as Radix from "./radix";
 // Utilities
 export { cn } from "./lib/utils";
 export { APP_LANGUAGES } from "./lib/languages";
-export { PROJECTS, getProjectUrl, type ProjectId } from "./lib/projects";
+export { PROJECTS, getProject, getProjectUrl, type ProjectId } from "./lib/projects";
+export { ProjectIcon } from "./components/views/ProjectIcon";
 export {
   createWorkspaceApi,
   type WorkspaceApi,
