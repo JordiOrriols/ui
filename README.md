@@ -87,6 +87,36 @@ export default {
 
 ### App-shell composition
 
+#### Account and public-link composition
+
+`AppAccountControls` belongs in the authenticated header's `actions` slot.
+It reuses the existing account button, `useAsyncAction`, `useLoginForm` and
+`LoginDialog` for sign-in, signup, password-reset, OAuth, pending sign-out and
+explicit auth errors. Supply `signedIn`, `enabled`, `projectId`, `actions`,
+translated `labels`, `messages`, `signOutLabel`, optional `accountTitle` and
+optional `authError`. The required `formatError` callback preserves app-specific
+localization and diagnostic privacy. Do not also supply `accountAction` when
+using these controls. Existing `accountAction` remains backwards-compatible.
+
+`AuthDialog` is the same controlled login composition for welcome pages:
+provide `isOpen`, `onClose` and optional `initialMode` (`signIn`/`signUp`) with
+the same actions/labels/messages/error formatter. Messages must be translated
+strings, not translation keys. Apps still own Supabase clients, session state,
+redirects and password-recovery routing.
+
+`PublicAppShell` composes `AppShell` with a non-interactive registry brand icon,
+no built-in account action or project switcher, and mobile-visible language
+selection. It accepts the same page/main/footer overrides and app-owned
+navigation/actions. Keep token checks, loading/error states, retry callbacks,
+data and restricted writes in consumers; a shared link is not necessarily
+read-only. Focused authenticated rooms may reuse this visual frame but must
+retain their auth/access gate. It never fetches data or changes permissions.
+
+Authenticated managers and employees should share `AppShell` and account
+controls; navigation items differ only by permitted destinations. Public/token
+pages use `PublicAppShell`. Content components should not add another page,
+header, main or footer. Both frames keep one flex-growing main and bottom footer.
+
 `AppShell` is a thin composition of the existing `AppPage`, `AppHeader`,
 `AppMain`, `ProjectIcon` and `AppFooter`. Supply one `projectId`, `header` props
 and app-owned `children`. The footer reuses the project identity and header
