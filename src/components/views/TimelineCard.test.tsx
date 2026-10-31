@@ -35,6 +35,8 @@ describe("TimelineCard", () => {
     );
     expect(screen.getByRole("region", { name: "Vacations" })).toBeVisible();
     expect(screen.getAllByRole("heading", { name: "Platform" })).toHaveLength(1);
+    expect(screen.getByText("Platform")).toHaveClass("sticky", "z-10", "bg-muted");
+    expect(screen.getByText("Anna")).toHaveClass("sticky", "z-10", "bg-card");
     expect(screen.getByText("Jordi")).toBeVisible();
     expect(screen.getByText("November")).toBeVisible();
     expect(screen.getByRole("img", { name: "Anna vacation" })).toHaveStyle({

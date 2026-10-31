@@ -21,3 +21,14 @@ export const EmptyChoice = {
     ],
   },
 };
+export const StatusIndicators = {
+  args: {
+    "aria-label": "Permission",
+    defaultValue: "",
+    options: [
+      { value: "", label: "No access", indicatorClassName: "bg-slate-400" },
+      { value: "viewer", label: "Viewer", indicatorClassName: "bg-blue-500" },
+      { value: "editor", label: "Editor", indicatorClassName: "bg-emerald-600" },
+    ],
+  },
+};

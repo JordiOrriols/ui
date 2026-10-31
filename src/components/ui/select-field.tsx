@@ -8,6 +8,7 @@ export interface SelectOption {
   label: string;
   disabled?: boolean;
   group?: string;
+  indicatorClassName?: string;
 }
 
 export interface SelectFieldProps extends Omit<
@@ -124,7 +125,22 @@ export const SelectField = React.forwardRef<HTMLButtonElement, SelectFieldProps>
                         disabled={option.disabled}
                         className="relative flex cursor-default select-none items-center rounded-sm py-2 pr-8 pl-2 text-sm outline-none data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
                       >
-                        <Select.ItemText>{option.label}</Select.ItemText>
+                        <Select.ItemText>
+                          {option.indicatorClassName ? (
+                            <span className="inline-flex min-w-0 items-center gap-2">
+                              <span
+                                aria-hidden="true"
+                                className={cn(
+                                  "size-2 shrink-0 rounded-full",
+                                  option.indicatorClassName
+                                )}
+                              />
+                              <span className="truncate">{option.label}</span>
+                            </span>
+                          ) : (
+                            option.label
+                          )}
+                        </Select.ItemText>
                         <Select.ItemIndicator className="absolute right-2 flex items-center">
                           <Check className="size-4" aria-hidden="true" />
                         </Select.ItemIndicator>

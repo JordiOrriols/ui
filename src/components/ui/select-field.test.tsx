@@ -10,6 +10,26 @@ const options = [
 ];
 
 describe("SelectField", () => {
+  it("reuses option indicators in the selected trigger without altering accessible labels or submitted values", async () => {
+    render(
+      <form aria-label="Access">
+        <SelectField
+          name="access"
+          aria-label="Permission"
+          options={[
+            { value: "", label: "No access", indicatorClassName: "bg-slate-400" },
+            { value: "viewer", label: "Viewer", indicatorClassName: "bg-blue-500" },
+          ]}
+        />
+      </form>
+    );
+    const trigger = screen.getByRole("combobox", { name: "Permission" });
+    expect(trigger.querySelector(".bg-slate-400")).toBeInTheDocument();
+    await userEvent.click(trigger);
+    await userEvent.click(screen.getByRole("option", { name: "Viewer", exact: true }));
+    expect(trigger.querySelector(".bg-blue-500")).toBeInTheDocument();
+    expect(new FormData(screen.getByRole("form") as HTMLFormElement).get("access")).toBe("viewer");
+  });
   it("uses a custom listbox, supports empty choices and submits the real form value", async () => {
     const changed = vi.fn();
     render(

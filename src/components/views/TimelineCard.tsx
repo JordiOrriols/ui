@@ -120,7 +120,7 @@ export function TimelineCard({
       )}
       <div className="overflow-x-auto">
         <div
-          className="relative"
+          className="relative isolate"
           style={{ minWidth: Math.max(minWidth, labelWidth + columns.length * columnWidth) }}
         >
           <div
@@ -204,12 +204,10 @@ export function TimelineCard({
                     <div
                       role="heading"
                       aria-level={3}
-                      className="border-b border-border/60 bg-muted/40 py-2"
+                      className="grid border-b border-border/60 bg-muted/40"
+                      style={{ gridTemplateColumns: `${labelWidth}px minmax(0,1fr)` }}
                     >
-                      <span
-                        className="sticky left-0 inline-block bg-muted px-2 text-[11px] font-semibold uppercase tracking-wide"
-                        style={{ width: labelWidth }}
-                      >
+                      <span className="sticky left-0 z-10 block bg-muted px-2 py-2 text-[11px] font-semibold uppercase tracking-wide">
                         {row.group.label}
                       </span>
                     </div>
@@ -222,7 +220,7 @@ export function TimelineCard({
                     <div className="sticky left-0 z-10 min-w-0 bg-card px-2 py-2 text-sm font-medium">
                       {row.label}
                     </div>
-                    <div className="relative flex min-h-10 items-center">
+                    <div className="relative z-0 flex min-h-10 items-center">
                       {row.spans.map((span) => (
                         <TimelineBar key={span.id} span={span} columnCount={columns.length} />
                       ))}
