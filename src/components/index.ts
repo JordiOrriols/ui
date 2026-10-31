@@ -13,6 +13,8 @@ export * from "./views/LoginDialog";
 export * from "./views/PasswordResetDialog";
 export * from "./views/ConfirmDialog";
 export * from "./views/EmptyState";
+export * from "./views/ErrorState";
+export * from "./views/ErrorBoundary";
 export * from "./views/SplitButton";
 export * from "./views/LanguageSelector";
 export * from "./views/indicators";
