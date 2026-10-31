@@ -85,6 +85,16 @@ export default {
 
 ## Components
 
+### Timeline cards
+
+`TimelineCard` renders a scrollable card from columns, grouped rows, spans and
+markers supplied through props. Labels are supplied by consumers for localization.
+Spans use half-open column offsets and are clipped to the visible range; fractional
+offsets support daily bars on weekly grids. Bars have shared hover/focus tooltips.
+Use `controls` and `legend` for the card header, and custom `children` when rows
+need existing drag/drop or context menus. `timelineColumns` keeps custom rows
+aligned with the shared header. The component contains no application data access.
+
 ### Checkboxes
 
 Use the shared `Checkbox` (Radix Checkbox) instead of native checkbox inputs.
