@@ -61,7 +61,7 @@ describe("Storybook component coverage", () => {
   ]);
 
   for (const [name, component] of Object.entries(components)) {
-    if (name === "buttonVariants") continue;
+    if (name === "buttonVariants" || name === "timelineColumns") continue;
     it(`${name} has Storybook metadata and examples`, () => {
       expect(documentedComponents.has(component)).toBe(true);
     });

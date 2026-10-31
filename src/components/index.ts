@@ -33,3 +33,4 @@ export * from "./views/WorkspaceBar";
 export * from "./views/WorkspaceShareDialog";
 export * from "./views/LevelSelector";
 export * from "./views/ReferenceDialog";
+export * from "./views/TimelineCard";
