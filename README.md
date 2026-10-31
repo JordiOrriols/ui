@@ -85,6 +85,30 @@ export default {
 
 ## Components
 
+### Form fields and textareas
+
+`FormField` reuses `Label` and provides consistent field spacing, optional translated
+`description` and `error` text, and accessible control/hint/error associations.
+Its child receives `id`, `aria-describedby` and `aria-invalid`: spread them onto
+the existing `Input`, `SelectField`, or the shared `Textarea`. IDs are generated
+uniquely unless an explicit `id` is provided. An external hint can be referenced
+using `aria-describedby` on `FormField`.
+
+```tsx
+import { FormField, Textarea } from "@jordiorriols/ui";
+
+<FormField label={t("notes.label")} description={t("notes.hint")} error={error}>
+  {(field) => (
+    <Textarea {...field} name="notes" required maxLength={20000} defaultValue={notes} />
+  )}
+</FormField>
+```
+
+`Textarea` follows `Input`'s existing tokens, focus/invalid/disabled styling and
+supports native textarea attributes, refs, controlled or uncontrolled values,
+`FormData` and form reset. Both components leave validation, submission and
+localization in the application; they do not introduce a form framework.
+
 ### Timeline cards
 
 `TimelineCard` renders a scrollable card from columns, grouped rows, spans and
