@@ -1,8 +1,9 @@
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { LogIn, LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import { ProjectSwitcher } from "./ProjectSwitcher";
 import { getProject, type ProjectId } from "../../lib/projects";
+import { LanguageSelector } from "./LanguageSelector";
 
 export function AppHeader({
   title,
@@ -11,6 +12,7 @@ export function AppHeader({
   projectId,
   projectSwitcherLabel,
   actions,
+  language,
   accountAction,
   navigation,
   leading,
@@ -23,6 +25,7 @@ export function AppHeader({
   projectId?: ProjectId;
   projectSwitcherLabel?: string;
   actions?: ReactNode;
+  language?: ComponentProps<typeof LanguageSelector>;
   accountAction?: {
     type: "signIn" | "signOut";
     label: string;
@@ -66,6 +69,7 @@ export function AppHeader({
             </div>
           </div>
           <div className="flex flex-wrap items-center justify-end gap-2">
+            {language && <LanguageSelector {...language} />}
             {actions}
             {accountAction && (
               <Button

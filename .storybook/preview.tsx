@@ -38,7 +38,7 @@ const preview: Preview = {
       const theme = (context.globals as { theme?: string }).theme ?? "light";
       return (
         <div className={theme === "dark" ? "dark" : undefined}>
-          <div className="p-6">
+          <div className={context.parameters.layout === "fullscreen" ? undefined : "p-6"}>
             <Story />
           </div>
         </div>

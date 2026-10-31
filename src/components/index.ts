@@ -22,6 +22,7 @@ export * from "./views/ButtonGroup";
 export * from "./views/AppHeader";
 export * from "./views/AppNavigation";
 export * from "./views/AppPage";
+export * from "./views/AppShell";
 export * from "./views/AppSkeleton";
 export * from "./views/ProjectSwitcher";
 export * from "./views/AppFooter";
