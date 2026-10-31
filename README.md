@@ -85,6 +85,41 @@ export default {
 
 ## Components
 
+### Error boundaries and error states
+
+`ErrorBoundary` catches descendant render/lifecycle failures. A required
+`fallback(error, reset)` keeps localized messages and recovery decisions in the
+app. Errors and component stacks go to `onError` when supplied, or `console.error`
+by default (with optional `componentName` context); errors are never silently
+discarded. Calling `reset` explicitly remounts the failed subtree.
+
+`ErrorState` provides a token-based accessible alert with a caller-supplied
+`message`, optional `title` and optional retry button. Supply `onRetry` and a
+translated `retryLabel` together; `retryDisabled` supports caller-owned busy
+state. Its button does not submit surrounding forms.
+
+```tsx
+<ErrorBoundary
+  componentName="Roadmap"
+  fallback={(error, reset) => (
+    <ErrorState
+      title={t("errors.title")}
+      message={localizeError(error.message)}
+      retryLabel={t("errors.retry")}
+      onRetry={reset}
+    />
+  )}
+>
+  <Roadmap />
+</ErrorBoundary>
+```
+
+Boundaries do not catch event-handler or asynchronous request failures. Render
+those through `ErrorState` using the app's existing query/action error handling.
+Keep raw error details out of employee/public fallbacks where the app currently
+uses generic localized copy. Retry cannot repair an unchanged failing condition;
+the app must decide whether to retry, reload data, navigate or reload the page.
+
 ### Form fields and textareas
 
 `FormField` reuses `Label` and provides consistent field spacing, optional translated
