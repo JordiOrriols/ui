@@ -3,6 +3,8 @@ export { Button, buttonVariants, type ButtonProps } from "./ui/button";
 export { IconTooltip } from "./ui/icon-tooltip";
 export { Checkbox } from "./ui/checkbox";
 export { Input } from "./ui/input";
+export { Textarea } from "./ui/textarea";
+export { FormField, type FormFieldProps, type FormFieldControlProps } from "./ui/form-field";
 export { Label } from "./ui/label";
 export { SelectField, type SelectFieldProps, type SelectOption } from "./ui/select-field";
 export * from "./ui/alert-dialog";
