@@ -94,6 +94,8 @@ offsets support daily bars on weekly grids. Bars have shared hover/focus tooltip
 Use `controls` and `legend` for the card header, and custom `children` when rows
 need existing drag/drop or context menus. `timelineColumns` keeps custom rows
 aligned with the shared header. The component contains no application data access.
+Pinned labels and group headings use opaque surfaces above bars and markers,
+including while the timeline is scrolled horizontally.
 
 ### Checkboxes
 
@@ -127,6 +129,8 @@ focus, disabled and selected styles. Pass `options: { value, label, disabled? }[
 `name`, `required`, `disabled` attributes. Empty-string options support “All” or
 “None”; a disabled empty option acts as a placeholder. Named fields submit their
 original values through `FormData`, including the empty string.
+Options can provide `indicatorClassName` for a decorative status dot, reused in
+the menu and selected trigger without changing text labels or submitted values.
 
 Use `getDisplayName({ memberName, accountName, email })` for person labels.
 It trims and prefers the workspace member name, then account name, then the
@@ -153,6 +157,10 @@ provided, editors and viewers can open Share to inspect current-app access and
 copy/open an existing public link, but cannot add people, edit permissions or
 enable/revoke public access. Restricted `member` accounts do not gain access.
 Without `sharing`, existing owner-only behavior is unchanged.
+The people list uses one aligned app-heading row rather than repeating app names
+for each person. On narrow screens the permission grid scrolls horizontally.
+Access selectors and read-only badges use gray for no access, blue for viewer and
+green for editor, with status dots and visible localized permission text.
 
 **Consumer/backend integration required:** `readAccess()` must call an authorized
 current-app directory endpoint, not the existing owner-only `list_workspace_shares`

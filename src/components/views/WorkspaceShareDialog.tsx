@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link2, Mail, Trash2 } from "lucide-react";
 import { useAsyncAction } from "../../hooks/useAsyncAction";
 import { PROJECTS, type ProjectId } from "../../lib/projects";
+import { cn } from "../../lib/utils";
 import type { WorkspaceApi, WorkspaceShare, WorkspaceShareAccess } from "../../lib/workspaces";
 import type { WorkspaceLabels } from "../../lib/workspace-labels";
 import { Button } from "../ui/button";
@@ -21,6 +22,12 @@ import {
 } from "../ui/alert-dialog";
 
 const ALL_APPS = "all";
+const ACCESS_STYLES = {
+  "": "border-border bg-muted text-muted-foreground",
+  viewer: "border-blue-500/30 bg-blue-500/10 text-blue-700 dark:text-blue-300",
+  editor: "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+};
+const ACCESS_DOTS = { "": "bg-slate-400", viewer: "bg-blue-500", editor: "bg-emerald-600" };
 
 interface ShareRow {
   userId: string;
@@ -78,6 +85,15 @@ export function WorkspaceShareDialog({
   const [tab, setTab] = useState("emails");
   const { run, reset, busy, error } = useAsyncAction();
   const text = labels.shareDialog;
+  const projects = PROJECTS.filter((project) => canManage || project.id === app);
+  const columns = {
+    gridTemplateColumns: `minmax(180px,1fr) repeat(${projects.length},120px)${canManage ? " 32px" : ""}`,
+  };
+  const accessOptions = [
+    { value: "", label: text.noAccess, indicatorClassName: ACCESS_DOTS[""] },
+    { value: "viewer", label: labels.access.viewer, indicatorClassName: ACCESS_DOTS.viewer },
+    { value: "editor", label: labels.access.editor, indicatorClassName: ACCESS_DOTS.editor },
+  ];
 
   const reload = useCallback(async () => {
     if (!canManage && !sharing) throw new Error("Read-only sharing requires an access directory");
@@ -199,11 +215,8 @@ export function WorkspaceShareDialog({
                       data-testid="share-access-select"
                       value={access}
                       onValueChange={(value) => setAccess(value as WorkspaceShareAccess)}
-                      className="mt-1"
-                      options={[
-                        { value: "viewer", label: labels.access.viewer },
-                        { value: "editor", label: labels.access.editor },
-                      ]}
+                      className={cn("mt-1", ACCESS_STYLES[access])}
+                      options={accessOptions.filter((option) => option.value !== "")}
                     />
                   </div>
                   <Button
@@ -227,71 +240,95 @@ export function WorkspaceShareDialog({
                   {text.publicLink.retry}
                 </Button>
               )}
-              <div className="space-y-2">
-                {rows === null ? (
-                  !error && <p className="text-sm text-muted-foreground">{text.loading}</p>
-                ) : rows.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">{text.empty}</p>
-                ) : (
-                  rows.map((row) => (
-                    <div
-                      key={row.userId}
-                      data-testid="share-row"
-                      className="flex flex-wrap items-center gap-2 rounded-md border border-border px-3 py-2"
-                    >
-                      <span className="min-w-40 flex-1 truncate text-sm">{row.email}</span>
-                      {PROJECTS.filter((project) => canManage || project.id === app).map(
-                        (project) => (
-                          <label key={project.id} className="flex items-center gap-1 text-xs">
-                            <span className="text-muted-foreground">{project.name}</span>
-                            {canManage ? (
-                              <SelectField
-                                data-testid={`share-row-${project.id}`}
-                                aria-label={text.accessFor(row.email, project.name)}
-                                value={row.access[project.id] ?? ""}
-                                disabled={busy}
-                                onValueChange={(value) =>
-                                  void setRowAccess(
-                                    row,
-                                    project.id,
-                                    value as WorkspaceShareAccess | ""
-                                  )
-                                }
-                                className="h-8 w-auto px-2 text-xs"
-                                options={[
-                                  { value: "", label: text.noAccess },
-                                  { value: "viewer", label: labels.access.viewer },
-                                  { value: "editor", label: labels.access.editor },
-                                ]}
-                              />
-                            ) : (
-                              <span
-                                aria-label={text.accessFor(row.email, project.name)}
-                                className="rounded-md bg-muted px-2 py-1"
-                              >
-                                {labels.access[row.access[project.id] ?? "viewer"]}
-                              </span>
-                            )}
-                          </label>
-                        )
-                      )}
-                      {canManage && (
-                        <Button
-                          eventId="workspace_share_remove"
-                          data-testid="share-row-remove"
-                          variant="ghost"
-                          size="icon-sm"
-                          disabled={busy}
-                          onClick={() => void removeRow(row)}
-                          aria-label={text.remove(row.email)}
-                          type="button"
+              <div className="overflow-x-auto">
+                <div className={cn("space-y-2", canManage && "min-w-[760px]")}>
+                  {rows === null ? (
+                    !error && <p className="text-sm text-muted-foreground">{text.loading}</p>
+                  ) : rows.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">{text.empty}</p>
+                  ) : (
+                    <>
+                      <div
+                        data-testid="share-column-headings"
+                        aria-hidden="true"
+                        className="grid items-center gap-2 px-3 text-xs font-semibold text-muted-foreground"
+                        style={columns}
+                      >
+                        <span>{text.email}</span>
+                        {projects.map((project) => (
+                          <span key={project.id}>{project.name}</span>
+                        ))}
+                      </div>
+                      {rows.map((row) => (
+                        <div
+                          key={row.userId}
+                          data-testid="share-row"
+                          className="grid items-center gap-2 rounded-md border border-border px-3 py-2"
+                          style={columns}
                         >
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      )}
-                    </div>
-                  ))
-                )}
+                          <span className="min-w-0 truncate text-sm" title={row.email}>
+                            {row.email}
+                          </span>
+                          {projects.map((project) => (
+                            <div key={project.id} className="min-w-0 text-xs">
+                              {canManage ? (
+                                <SelectField
+                                  data-testid={`share-row-${project.id}`}
+                                  aria-label={text.accessFor(row.email, project.name)}
+                                  value={row.access[project.id] ?? ""}
+                                  disabled={busy}
+                                  onValueChange={(value) =>
+                                    void setRowAccess(
+                                      row,
+                                      project.id,
+                                      value as WorkspaceShareAccess | ""
+                                    )
+                                  }
+                                  className={cn(
+                                    "h-8 px-2 text-xs",
+                                    ACCESS_STYLES[row.access[project.id] ?? ""]
+                                  )}
+                                  options={accessOptions}
+                                />
+                              ) : (
+                                <span
+                                  aria-label={text.accessFor(row.email, project.name)}
+                                  className={cn(
+                                    "inline-flex items-center gap-2 rounded-md border px-2 py-1",
+                                    ACCESS_STYLES[row.access[project.id] ?? "viewer"]
+                                  )}
+                                >
+                                  <span
+                                    aria-hidden="true"
+                                    className={cn(
+                                      "size-2 rounded-full",
+                                      ACCESS_DOTS[row.access[project.id] ?? "viewer"]
+                                    )}
+                                  />
+                                  {labels.access[row.access[project.id] ?? "viewer"]}
+                                </span>
+                              )}
+                            </div>
+                          ))}
+                          {canManage && (
+                            <Button
+                              eventId="workspace_share_remove"
+                              data-testid="share-row-remove"
+                              variant="ghost"
+                              size="icon-sm"
+                              disabled={busy}
+                              onClick={() => void removeRow(row)}
+                              aria-label={text.remove(row.email)}
+                              type="button"
+                            >
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
               </div>
             </section>
           </TabsContent>

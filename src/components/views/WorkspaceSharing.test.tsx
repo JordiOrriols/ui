@@ -39,6 +39,32 @@ function setup(access: WorkspaceAccessLevel = "owner", enabled = true) {
   return { api, sharing, listShares, ...view };
 }
 describe("unified workspace sharing", () => {
+  it("shows app headings once above aligned rows and colors access changes", async () => {
+    setup();
+    await userEvent.click(screen.getByTestId("workspace-share"));
+    await screen.findByText("reader@example.com");
+    const headings = screen.getByTestId("share-column-headings");
+    expect(headings).toHaveTextContent("EmailLaddersPlannerPulseShiplog");
+    const rows = screen.getAllByTestId("share-row");
+    for (const row of rows) {
+      expect(row).toHaveClass("grid");
+      expect(row.style.gridTemplateColumns).toBe(headings.style.gridTemplateColumns);
+      for (const app of ["Ladders", "Planner", "Pulse", "Shiplog"])
+        expect(within(row).queryByText(app, { exact: true })).not.toBeInTheDocument();
+    }
+    const permission = screen.getByLabelText("Planner access for reader@example.com");
+    expect(permission).toHaveClass("bg-blue-500/10");
+    expect(screen.getAllByTestId("share-row-ladders")[0]).toHaveClass("bg-muted");
+    await userEvent.click(permission);
+    expect(
+      screen.getByRole("option", { name: "Editor" }).querySelector(".bg-emerald-600")
+    ).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("option", { name: "Editor" }));
+    await waitFor(() => expect(permission).toHaveClass("bg-emerald-500/10"));
+    await userEvent.click(permission);
+    await userEvent.click(screen.getByRole("option", { name: "No access" }));
+    await waitFor(() => expect(screen.queryByText("reader@example.com")).not.toBeInTheDocument());
+  });
   it("keeps people-only sharing unchanged when no public link is configured", async () => {
     render(
       <WorkspaceShareDialog
