@@ -85,6 +85,15 @@ export default {
 
 ## Components
 
+### Checkboxes
+
+Use the shared `Checkbox` (Radix Checkbox) instead of native checkbox inputs.
+It supports `checked`/`onCheckedChange`, `defaultChecked`, `"indeterminate"`,
+disabled/required state, refs, keyboard Space, and label activation. Provide an
+associated label or `aria-label`. Named checkboxes preserve native `FormData`
+semantics (`"on"` by default, omitted when unchecked) and form reset.
+Keep Radix `DropdownMenu.CheckboxItem` inside menus; it has distinct menu semantics.
+
 ### Icon actions and contribution links
 
 `Button` automatically shows the shared tooltip on hover and keyboard focus when
