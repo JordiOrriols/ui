@@ -1,9 +1,9 @@
 import type { ComponentProps, ReactNode } from "react";
-import { LogIn, LogOut } from "lucide-react";
-import { Button } from "../ui/button";
+import { AccountButton, type AccountButtonProps } from "./AccountButton";
 import { ProjectSwitcher } from "./ProjectSwitcher";
 import { getProject, type ProjectId } from "../../lib/projects";
 import { LanguageSelector } from "./LanguageSelector";
+import { cn } from "../../lib/utils";
 
 export function AppHeader({
   title,
@@ -11,6 +11,7 @@ export function AppHeader({
   icon,
   projectId,
   projectSwitcherLabel,
+  projectSwitcher = true,
   actions,
   language,
   accountAction,
@@ -24,15 +25,10 @@ export function AppHeader({
   icon: ReactNode;
   projectId?: ProjectId;
   projectSwitcherLabel?: string;
+  projectSwitcher?: boolean;
   actions?: ReactNode;
   language?: ComponentProps<typeof LanguageSelector>;
-  accountAction?: {
-    type: "signIn" | "signOut";
-    label: string;
-    onClick: () => void;
-    disabled?: boolean;
-    title?: string;
-  };
+  accountAction?: Omit<AccountButtonProps, "projectId">;
   navigation?: ReactNode;
   /** Rendered before the brand icon, e.g. a back button. */
   leading?: ReactNode;
@@ -45,7 +41,7 @@ export function AppHeader({
         <div className="flex flex-wrap items-center justify-between min-h-16 py-3 gap-3">
           <div className="flex items-center gap-3" data-testid="header-content">
             {leading}
-            {projectId ? (
+            {projectId && projectSwitcher ? (
               <ProjectSwitcher
                 projectId={projectId}
                 {...(projectSwitcherLabel ? { label: projectSwitcherLabel } : {})}
@@ -53,7 +49,21 @@ export function AppHeader({
                 {icon}
               </ProjectSwitcher>
             ) : (
-              <div className="w-10 h-10 shrink-0 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white [&_svg]:size-5">
+              <div
+                className={cn(
+                  "w-10 h-10 shrink-0 rounded-xl flex items-center justify-center [&_svg]:size-5",
+                  !projectId && "bg-gradient-to-br from-indigo-500 to-purple-600 text-white"
+                )}
+                style={
+                  projectId
+                    ? {
+                        color: getProject(projectId).color,
+                        backgroundColor: getProject(projectId).backgroundColor,
+                      }
+                    : undefined
+                }
+                data-testid="app-brand-icon"
+              >
                 {icon}
               </div>
             )}
@@ -71,29 +81,7 @@ export function AppHeader({
           <div className="flex flex-wrap items-center justify-end gap-2">
             {language && <LanguageSelector {...language} />}
             {actions}
-            {accountAction && (
-              <Button
-                eventId={`header_${accountAction.type === "signIn" ? "sign_in" : "sign_out"}`}
-                variant={accountAction.type === "signIn" ? "outline" : "ghost"}
-                size="sm"
-                aria-label={accountAction.label}
-                disabled={accountAction.disabled}
-                onClick={accountAction.onClick}
-                title={accountAction.title}
-                data-testid={accountAction.type === "signIn" ? "sign-in-button" : "sign-out-button"}
-              >
-                {accountAction.type === "signIn" ? (
-                  <LogIn
-                    className="size-4"
-                    aria-hidden="true"
-                    style={projectId ? { color: getProject(projectId).color } : undefined}
-                  />
-                ) : (
-                  <LogOut className="size-4" />
-                )}
-                <span className="hidden md:inline">{accountAction.label}</span>
-              </Button>
-            )}
+            {accountAction && <AccountButton {...accountAction} projectId={projectId} />}
           </div>
         </div>
       </div>
