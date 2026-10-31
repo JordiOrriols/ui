@@ -85,6 +85,45 @@ export default {
 
 ## Components
 
+### App-shell composition
+
+`AppShell` is a thin composition of the existing `AppPage`, `AppHeader`,
+`AppMain`, `ProjectIcon` and `AppFooter`. Supply one `projectId`, `header` props
+and app-owned `children`. The footer reuses the project identity and header
+language by default, with optional translated footer text. `mainClassName`
+supports existing full-width roadmaps; `className` styles the page canvas.
+The flex page keeps the footer below the main content on short and long pages.
+
+`AppHeader` now accepts optional `language` props for the existing
+`LanguageSelector`; it renders before any extra `actions`. Existing `actions`
+and header APIs remain supported. Provide `className: "inline-flex"` on the
+language configuration where selectors must remain visible on mobile.
+
+```tsx
+<AppShell
+  projectId="planner"
+  header={{
+    title: t("planner.name"),
+    language: {
+      value: i18n.language,
+      label: t("header.language"),
+      className: "inline-flex",
+      onValueChange: changeLanguage,
+    },
+    accountAction,
+    navigation,
+  }}
+  footer={{ text: t("app.footer") }}
+>
+  <Outlet />
+</AppShell>
+```
+
+This component owns no router, authentication, workspace API or data provider.
+Keep navigation links, access rules, sharing controls and error handling in the
+apps. Use the existing individual components for specialized employee/public
+layouts rather than forcing them into the shell.
+
 ### Error boundaries and error states
 
 `ErrorBoundary` catches descendant render/lifecycle failures. A required
