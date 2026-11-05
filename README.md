@@ -518,12 +518,13 @@ npm run build-storybook
 
 ## Publishing
 
-The package is automatically published to GitHub Packages when you push a new tag:
-
-```bash
-git tag v0.1.0
-git push origin v0.1.0
-```
+Every merge to `main` publishes a new version to GitHub Packages once the
+verify job passes, and tags the merged commit with it. The version is not
+committed back, because `main` only accepts reviewed pull requests: the
+workflow publishes the latest registry version plus a patch, so the
+`package.json` version on `main` may lag behind the registry. For a minor or
+major release, raise `version` in `package.json` above the published one in the
+pull request; that exact version is published.
 
 ## License
 

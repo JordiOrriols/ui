@@ -1,6 +1,6 @@
 name: Publish Package
 
-# Every push to main bumps the patch version and publishes to GitHub Packages,
+# Every push to main publishes the next version to GitHub Packages,
 # so consumers can always install the latest state of the library.
 # A version is only published once the verify job is green.
 on:
@@ -71,11 +71,27 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Bump patch version
+      # main only accepts reviewed pull requests, so the released version is
+      # never committed back. The next version is the latest published one
+      # plus a patch, unless package.json was raised above it through a pull
+      # request (for a minor or major release), which is then used as is.
+      - name: Pick the next version
         id: bump
         run: |
-          npm version patch --no-git-tag-version
+          published=$(npm view @jordiorriols/ui version 2>/dev/null || echo 0.0.0)
+          ahead=$(PUBLISHED="$published" node -p "
+            const parse = (v) => v.split('.').map(Number);
+            const [a, b] = [parse(process.env.PUBLISHED), parse(require('./package.json').version)];
+            const i = a.findIndex((n, k) => n !== b[k]);
+            i !== -1 && b[i] > a[i];
+          ")
+          if [ "$ahead" != "true" ]; then
+            npm version "$published" --no-git-tag-version --allow-same-version
+            npm version patch --no-git-tag-version
+          fi
           echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
         run: npm run build
@@ -85,14 +101,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Commit version bump and tag
+      - name: Tag the release
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add package.json package-lock.json
-          # [skip ci] stops this push from re-triggering this workflow, which
-          # would otherwise bump and publish a version on every single push.
-          git commit -m "chore: release v${{ steps.bump.outputs.version }} [skip ci]"
           git tag "v${{ steps.bump.outputs.version }}"
-          git push
           git push origin "v${{ steps.bump.outputs.version }}"
