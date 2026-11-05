@@ -518,12 +518,11 @@ npm run build-storybook
 
 ## Publishing
 
-The package is automatically published to GitHub Packages when you push a new tag:
-
-```bash
-git tag v0.1.0
-git push origin v0.1.0
-```
+Every merge to `main` publishes the next patch version to GitHub Packages once
+the verify job passes. The publish job then pushes a `chore: release vX [skip ci]`
+commit and a `vX` tag back to `main`; the GitHub Actions app is on the `main`
+ruleset's bypass list so it can do this. For a minor or major release, raise
+`version` in `package.json` in the pull request; the job adds a patch to it.
 
 ## License
 
