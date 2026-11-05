@@ -311,11 +311,12 @@ footers stay outside the scrolling content, preserving action visibility.
 `PROJECTS` in `src/lib/projects.ts` is the single registry for project IDs,
 names, icons, brand colors and canonical URLs. Add a project there and release/update this
 package in each consumer; no consumer-owned menu list is needed. Pass
-`projectId="planner"`, `projectId="ladders"` or `projectId="pulse"` to `AppHeader` to enable its icon
+`projectId="planner"`, `projectId="ladders"`, `projectId="pulse"`, `projectId="shiplog"` or
+`projectId="agents"` to `AppHeader` to enable its icon
 dropdown. `getProjectUrl("planner")` also supplies cross-app vacation links.
 
 The shared palette is Ladders blue (`#3b82f6`), Planner green (`#10b981`),
-Pulse purple (`#a855f7`) and Shiplog orange (`#f59e0b`). Header switcher icons
+Pulse purple (`#a855f7`), Shiplog orange (`#f59e0b`) and Agents cyan (`#06b6d4`). Header switcher icons
 use their project color on a subtle tinted background; every menu icon uses its
 own project color. The header sign-in icon also uses the current project's color.
 These colors are explicit SVG styles, so consumers do not need additional

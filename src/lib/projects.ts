@@ -1,4 +1,4 @@
-import { TrendingUp, GanttChartSquare, HeartPulse, Rocket } from "lucide-react";
+import { Bot, TrendingUp, GanttChartSquare, HeartPulse, Rocket } from "lucide-react";
 
 export const PROJECTS = [
   {
@@ -36,6 +36,15 @@ export const PROJECTS = [
     icon: Rocket,
     color: "#f59e0b",
     backgroundColor: "#f59e0b1a",
+  },
+  {
+    id: "agents",
+    repositoryUrl: "https://github.com/JordiOrriols/agents",
+    name: "Agents",
+    url: "https://agents.jordiorriols.cat/",
+    icon: Bot,
+    color: "#06b6d4",
+    backgroundColor: "#06b6d41a",
   },
 ] as const;
 
