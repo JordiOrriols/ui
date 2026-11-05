@@ -40,7 +40,7 @@ describe("Shared feedback and footer", () => {
     rerender(<AppFooter text="Fet amb amor per Jordi Orriols" />);
     expect(screen.getByRole("contentinfo")).toHaveTextContent("Fet amb amor per Jordi Orriols");
   });
-  it.each(["ladders", "planner", "pulse", "shiplog"] as const)(
+  it.each(["ladders", "planner", "pulse", "shiplog", "agents"] as const)(
     "links the %s footer icon to its repository with a shared tooltip",
     async (projectId) => {
       render(<AppFooter projectId={projectId} />);

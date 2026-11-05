@@ -31,6 +31,7 @@ describe("shared project directory", () => {
       "Planner",
       "Pulse",
       "Shiplog",
+      "Agents",
     ]);
     const pulse = screen.getByRole("menuitem", { name: "Pulse" });
     expect(pulse).toHaveAttribute("href", "https://pulse.jordiorriols.cat/");
@@ -47,6 +48,16 @@ describe("shared project directory", () => {
       "href",
       "https://shiplog.jordiorriols.cat/"
     );
+  });
+
+  it("uses the Agents bot and canonical URL", async () => {
+    render(<AppHeader title="Agents" projectId="agents" />);
+    const trigger = screen.getByRole("button", { name: "Switch project" });
+    expect(trigger.querySelector("svg.lucide-bot")).not.toBeNull();
+    await userEvent.click(trigger);
+    const agents = screen.getByRole("menuitem", { name: "Agents" });
+    expect(agents).toHaveAttribute("href", "https://agents.jordiorriols.cat/");
+    expect(agents).toHaveAttribute("aria-current", "page");
   });
 
   it("uses the registry growth icon in both Ladders locations without a chevron", async () => {

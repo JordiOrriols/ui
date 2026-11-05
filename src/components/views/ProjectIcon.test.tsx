@@ -11,6 +11,7 @@ const palette = [
   ["planner", "#10b981", "lucide-square-chart-gantt"],
   ["pulse", "#a855f7", "lucide-heart-pulse"],
   ["shiplog", "#f59e0b", "lucide-rocket"],
+  ["agents", "#06b6d4", "lucide-bot"],
 ] as const;
 
 describe("shared project brand colors", () => {

@@ -70,3 +70,4 @@ export const HeaderAndLogin: Story = {
 export const Planner: Story = { ...HeaderAndLogin, args: { projectId: "planner" } };
 export const Pulse: Story = { ...HeaderAndLogin, args: { projectId: "pulse" } };
 export const Shiplog: Story = { ...HeaderAndLogin, args: { projectId: "shiplog" } };
+export const Agents: Story = { ...HeaderAndLogin, args: { projectId: "agents" } };

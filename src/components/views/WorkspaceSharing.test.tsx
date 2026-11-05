@@ -44,12 +44,12 @@ describe("unified workspace sharing", () => {
     await userEvent.click(screen.getByTestId("workspace-share"));
     await screen.findByText("reader@example.com");
     const headings = screen.getByTestId("share-column-headings");
-    expect(headings).toHaveTextContent("EmailLaddersPlannerPulseShiplog");
+    expect(headings).toHaveTextContent("EmailLaddersPlannerPulseShiplogAgents");
     const rows = screen.getAllByTestId("share-row");
     for (const row of rows) {
       expect(row).toHaveClass("grid");
       expect(row.style.gridTemplateColumns).toBe(headings.style.gridTemplateColumns);
-      for (const app of ["Ladders", "Planner", "Pulse", "Shiplog"])
+      for (const app of ["Ladders", "Planner", "Pulse", "Shiplog", "Agents"])
         expect(within(row).queryByText(app, { exact: true })).not.toBeInTheDocument();
     }
     const permission = screen.getByLabelText("Planner access for reader@example.com");
