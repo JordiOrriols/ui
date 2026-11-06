@@ -38,5 +38,8 @@ export function createDemoWorkspaceApi(initial: WorkspaceShare[] = []): Workspac
     removeShare: async (_workspace, account, app) => {
       shares = shares.filter((share) => !(share.user_id === account && share.app === app));
     },
+    deleteWorkspace: async (workspace) => {
+      workspaces = workspaces.filter((item) => item.id !== workspace);
+    },
   };
 }

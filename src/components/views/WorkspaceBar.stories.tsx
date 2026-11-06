@@ -28,6 +28,9 @@ function Bar({ language = "en", value = "digital" }: { language?: string; value?
         setWorkspaces((previous) => [...previous, created]);
         setSelected(created.id);
       }}
+      onDeleted={async () => {
+        setWorkspaces(await api.listWorkspaces("planner"));
+      }}
       labels={getWorkspaceLabels(language)}
     />
   );

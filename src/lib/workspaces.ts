@@ -95,7 +95,10 @@ export function createWorkspaceApi(client: SupabaseClient) {
     ) => rpc("update_workspace_share", { workspace, account, app_name: app, access }),
     removeShare: (workspace: string, account: string, app: ProjectId) =>
       rpc("remove_workspace_share", { workspace, account, app_name: app }),
+    deleteWorkspace: (workspace: string) => rpc("delete_workspace", { workspace }),
   };
 }
 
-export type WorkspaceApi = ReturnType<typeof createWorkspaceApi>;
+export type WorkspaceApi = Omit<ReturnType<typeof createWorkspaceApi>, "deleteWorkspace"> & {
+  deleteWorkspace?: (workspace: string) => Promise<unknown>;
+};
