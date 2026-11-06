@@ -1,4 +1,5 @@
 export interface WorkspaceLabels {
+  lifecycle?: WorkspaceLifecycleLabels;
   workspace: string;
   newWorkspace: string;
   share: string;
@@ -328,9 +329,126 @@ const it: WorkspaceLabels = {
   },
 };
 
-const LABELS: Record<string, WorkspaceLabels> = { en, es, ca, fr, de, it };
+const BASE_LABELS: Record<string, WorkspaceLabels> = { en, es, ca, fr, de, it };
 
 /** Built-in workspace copy in every app language, falling back to English. */
 export function getWorkspaceLabels(language: string): WorkspaceLabels {
-  return LABELS[language.split("-")[0] ?? "en"] ?? en;
+  return LABELS[language.split("-")[0] ?? "en"] ?? LABELS.en!;
 }
+
+export interface WorkspaceLifecycleLabels {
+  title: string;
+  description: string;
+  wait: string;
+  waiting: string;
+  waitingDescription: string;
+  refresh: string;
+  signOut: string;
+  delete: string;
+  deleteTitle: string;
+  deleteDescription: string;
+}
+
+const LIFECYCLE: Record<string, WorkspaceLifecycleLabels> = {
+  en: {
+    title: "How would you like to start?",
+    description:
+      "Create a workspace for your team, or wait for someone to invite you. Your account does not need its own workspace.",
+    wait: "Wait for an invitation",
+    waiting: "Waiting for an invitation",
+    waitingDescription:
+      "Ask a workspace owner to share access with your account. We will check for invitations automatically.",
+    refresh: "Check invitations",
+    signOut: "Sign out",
+    delete: "Delete workspace",
+    deleteTitle: "Delete this workspace?",
+    deleteDescription:
+      "Only empty workspaces can be deleted. Empty teams and projects will also be removed. Content in any app prevents deletion.",
+  },
+  es: {
+    title: "¿Cómo quieres empezar?",
+    description:
+      "Crea un espacio para tu equipo o espera a que te inviten. Tu cuenta no necesita un espacio propio.",
+    wait: "Esperar una invitación",
+    waiting: "Esperando una invitación",
+    waitingDescription:
+      "Pide a un propietario que comparta el acceso con tu cuenta. Comprobaremos las invitaciones automáticamente.",
+    refresh: "Comprobar invitaciones",
+    signOut: "Cerrar sesión",
+    delete: "Borrar espacio de trabajo",
+    deleteTitle: "¿Borrar este espacio de trabajo?",
+    deleteDescription:
+      "Solo se pueden borrar espacios vacíos. También se eliminarán los equipos y proyectos vacíos. El contenido de cualquier aplicación impide borrarlo.",
+  },
+  ca: {
+    title: "Com vols començar?",
+    description:
+      "Crea un espai per al teu equip o espera que et convidin. El teu compte no necessita un espai propi.",
+    wait: "Esperar una invitació",
+    waiting: "Esperant una invitació",
+    waitingDescription:
+      "Demana a un propietari que comparteixi l'accés amb el teu compte. Comprovarem les invitacions automàticament.",
+    refresh: "Comprovar invitacions",
+    signOut: "Tancar la sessió",
+    delete: "Suprimir espai de treball",
+    deleteTitle: "Vols suprimir aquest espai de treball?",
+    deleteDescription:
+      "Només es poden suprimir espais buits. També s'eliminaran els equips i projectes buits. El contingut de qualsevol aplicació impedeix suprimir-lo.",
+  },
+  fr: {
+    title: "Comment souhaitez-vous commencer ?",
+    description:
+      "Créez un espace pour votre équipe ou attendez une invitation. Votre compte n'a pas besoin de son propre espace.",
+    wait: "Attendre une invitation",
+    waiting: "En attente d'une invitation",
+    waitingDescription:
+      "Demandez à un propriétaire de partager l'accès avec votre compte. Nous vérifierons automatiquement les invitations.",
+    refresh: "Vérifier les invitations",
+    signOut: "Se déconnecter",
+    delete: "Supprimer l'espace",
+    deleteTitle: "Supprimer cet espace ?",
+    deleteDescription:
+      "Seuls les espaces vides peuvent être supprimés, y compris leurs équipes et projets vides. Le contenu de toute application empêche la suppression.",
+  },
+  de: {
+    title: "Wie möchten Sie beginnen?",
+    description:
+      "Erstellen Sie einen Arbeitsbereich oder warten Sie auf eine Einladung. Ihr Konto benötigt keinen eigenen Arbeitsbereich.",
+    wait: "Auf eine Einladung warten",
+    waiting: "Warten auf eine Einladung",
+    waitingDescription:
+      "Bitten Sie einen Eigentümer, den Zugriff mit Ihrem Konto zu teilen. Wir prüfen automatisch auf Einladungen.",
+    refresh: "Einladungen prüfen",
+    signOut: "Abmelden",
+    delete: "Arbeitsbereich löschen",
+    deleteTitle: "Diesen Arbeitsbereich löschen?",
+    deleteDescription:
+      "Nur leere Arbeitsbereiche können gelöscht werden, einschließlich leerer Teams und Projekte. Inhalte in einer Anwendung verhindern das Löschen.",
+  },
+  it: {
+    title: "Come vuoi iniziare?",
+    description:
+      "Crea uno spazio per il tuo team o aspetta un invito. Il tuo account non ha bisogno di uno spazio proprio.",
+    wait: "Aspettare un invito",
+    waiting: "In attesa di un invito",
+    waitingDescription:
+      "Chiedi a un proprietario di condividere l'accesso con il tuo account. Controlleremo automaticamente gli inviti.",
+    refresh: "Controllare gli inviti",
+    signOut: "Esci",
+    delete: "Elimina spazio",
+    deleteTitle: "Eliminare questo spazio?",
+    deleteDescription:
+      "Si possono eliminare solo spazi vuoti, compresi team e progetti vuoti. Il contenuto di qualsiasi applicazione impedisce l'eliminazione.",
+  },
+};
+
+export function getWorkspaceLifecycleLabels(language: string): WorkspaceLifecycleLabels {
+  return LIFECYCLE[language.split("-")[0] ?? "en"] ?? LIFECYCLE.en!;
+}
+
+const LABELS: Record<string, WorkspaceLabels> = Object.fromEntries(
+  Object.entries(BASE_LABELS).map(([language, labels]) => [
+    language,
+    { ...labels, lifecycle: getWorkspaceLifecycleLabels(language) },
+  ])
+);

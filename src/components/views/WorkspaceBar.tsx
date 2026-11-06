@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { DropdownMenu } from "radix-ui";
-import { Check, ChevronDown, Plus, Share2 } from "lucide-react";
+import { Check, ChevronDown, Plus, Share2, Trash2 } from "lucide-react";
 import { useNameForm } from "../../hooks/useNameForm";
+import { useAsyncAction } from "../../hooks/useAsyncAction";
 import type { ProjectId } from "../../lib/projects";
 import type { WorkspaceApi, WorkspaceSummary } from "../../lib/workspaces";
 import type { WorkspaceLabels } from "../../lib/workspace-labels";
+import { getWorkspaceLifecycleLabels } from "../../lib/workspace-labels";
 import { Button, buttonVariants } from "../ui/button";
 import { NameDialog } from "./NameDialog";
+import { ConfirmDialog } from "./ConfirmDialog";
+import { ErrorState } from "./ErrorState";
 import { WorkspaceShareDialog } from "./WorkspaceShareDialog";
 import type { WorkspaceSharingConfig } from "./WorkspaceShareDialog";
 
@@ -25,6 +29,7 @@ export function WorkspaceBar({
   onValueChange,
   onCreated,
   onSharesChanged,
+  onDeleted,
   labels,
   sharing,
 }: {
@@ -35,11 +40,15 @@ export function WorkspaceBar({
   onValueChange: (id: string) => void;
   onCreated: (workspace: WorkspaceSummary) => void | Promise<void>;
   onSharesChanged?: () => void | Promise<void>;
+  onDeleted?: () => void | Promise<void>;
   labels: WorkspaceLabels;
   sharing?: WorkspaceSharingConfig;
 }) {
   const [creating, setCreating] = useState(false);
   const [sharingOpen, setSharing] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const action = useAsyncAction();
+  const lifecycle = labels.lifecycle ?? getWorkspaceLifecycleLabels("en");
   const current = workspaces.find((workspace) => workspace.id === value);
   const canShare =
     current?.access_level === "owner" ||
@@ -60,6 +69,7 @@ export function WorkspaceBar({
           aria-label={labels.workspace}
           title={current?.name}
           data-testid="workspace-switcher"
+          disabled={action.busy}
         >
           <span className="max-w-32 truncate sm:max-w-48">{current?.name ?? labels.workspace}</span>
           {current && (
@@ -96,6 +106,16 @@ export function WorkspaceBar({
               <Plus className="size-4" />
               {labels.newWorkspace}
             </DropdownMenu.Item>
+            {current?.access_level === "owner" && api.deleteWorkspace && onDeleted && (
+              <DropdownMenu.Item
+                className={itemClassName}
+                disabled={action.busy}
+                onSelect={() => setDeleting(true)}
+              >
+                <Trash2 className="size-4" />
+                {lifecycle.delete}
+              </DropdownMenu.Item>
+            )}
           </DropdownMenu.Content>
         </DropdownMenu.Portal>
       </DropdownMenu.Root>
@@ -106,6 +126,7 @@ export function WorkspaceBar({
           variant="outline"
           size="sm"
           onClick={() => setSharing(true)}
+          disabled={action.busy}
         >
           <Share2 className="size-4" />
           {labels.share}
@@ -117,6 +138,24 @@ export function WorkspaceBar({
         form={nameForm}
         eventId="workspace_create"
         labels={labels.create}
+      />
+      {action.error && <ErrorState message={action.error} />}
+      <ConfirmDialog
+        isOpen={deleting}
+        title={lifecycle.deleteTitle}
+        description={`${current?.name ?? ""}. ${lifecycle.deleteDescription}`}
+        confirmLabel={lifecycle.delete}
+        cancelLabel={labels.create.cancel}
+        onCancel={() => setDeleting(false)}
+        onConfirm={() => {
+          setDeleting(false);
+          const remove = api.deleteWorkspace;
+          if (current && remove && onDeleted)
+            void action.run(async () => {
+              await remove(current.id);
+              await onDeleted();
+            });
+        }}
       />
       {current && (
         <WorkspaceShareDialog

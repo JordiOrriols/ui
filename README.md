@@ -85,6 +85,22 @@ export default {
 
 ## Components
 
+### Workspace lifecycle
+
+Show `WorkspaceSetup` only after the signed-in account's workspace directory has loaded
+and is empty. Pass the stable `createWorkspaceApi` instance, `language`, `onCreated`
+and `onRefresh` (normally `useWorkspaceList().refresh`), plus optional `onSignOut`.
+It offers explicit creation or waiting for an invitation; waiting polls every 15 seconds
+and never creates a workspace. Keep loading, directory errors and account controls in
+the app shell. All six app languages are shared by the library.
+
+`WorkspaceBar` exposes owner-only deletion when the API supports `deleteWorkspace`
+and the host supplies `onDeleted`. After confirmation it calls the backend
+`delete_workspace` RPC, displays errors and refreshes the directory only on success.
+The backend rejects workspaces with content in any app and removes empty teams/projects.
+The capability is optional to keep older mocks and consumers compatible. Deploy the
+backend workspace-lifecycle migration before enabling deletion in consumers.
+
 ### App-shell composition
 
 #### Account and public-link composition
