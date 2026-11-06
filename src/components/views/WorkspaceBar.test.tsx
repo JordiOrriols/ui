@@ -67,6 +67,55 @@ function renderBar(api: WorkspaceApi, value = OWNED.id) {
 }
 
 describe("WorkspaceBar", () => {
+  it("confirms deletion and refreshes only after successful deletion", async () => {
+    const api = { ...fakeApi(), deleteWorkspace: vi.fn(async () => {}) };
+    const onDeleted = vi.fn();
+    render(
+      <WorkspaceBar
+        api={api}
+        app="planner"
+        workspaces={[OWNED]}
+        value={OWNED.id}
+        labels={labels}
+        onValueChange={vi.fn()}
+        onCreated={vi.fn()}
+        onDeleted={onDeleted}
+      />
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Workspace" }));
+    await userEvent.click(screen.getByRole("menuitem", { name: "Delete workspace" }));
+    expect(api.deleteWorkspace).not.toHaveBeenCalled();
+    await userEvent.click(screen.getByTestId("confirm-dialog-confirm"));
+    await waitFor(() => expect(onDeleted).toHaveBeenCalledOnce());
+    expect(api.deleteWorkspace).toHaveBeenCalledWith(OWNED.id);
+  });
+
+  it("keeps a nonempty workspace and displays the server rejection", async () => {
+    const api = {
+      ...fakeApi(),
+      deleteWorkspace: vi.fn(async () => {
+        throw new Error("Workspace is not empty");
+      }),
+    };
+    const onDeleted = vi.fn();
+    render(
+      <WorkspaceBar
+        api={api}
+        app="planner"
+        workspaces={[OWNED]}
+        value={OWNED.id}
+        labels={labels}
+        onValueChange={vi.fn()}
+        onCreated={vi.fn()}
+        onDeleted={onDeleted}
+      />
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Workspace" }));
+    await userEvent.click(screen.getByRole("menuitem", { name: "Delete workspace" }));
+    await userEvent.click(screen.getByTestId("confirm-dialog-confirm"));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Workspace is not empty");
+    expect(onDeleted).not.toHaveBeenCalled();
+  });
   it("switches workspaces and only offers sharing to the owner", async () => {
     const props = renderBar(fakeApi());
     const trigger = screen.getByRole("button", { name: "Workspace" });
